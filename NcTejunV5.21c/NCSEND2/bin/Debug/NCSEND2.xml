@@ -1,0 +1,1323 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>NCSEND2</name>
+    </assembly>
+    <members>
+        <member name="P:NCSEND2.Form1.SelCamSystem">
+            <summary>ＣＡＭのシステム番号（ラジオボタンの０からの連番 0:TEBIS 1:Dynavista）</summary>
+        </member>
+        <member name="M:NCSEND2.Form1.text1_KeyDown(System.Object,System.Windows.Forms.KeyEventArgs)">
+            <summary>
+            テキストボックスのエンターキー
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:NCSEND2.Form1.Text1_DoubleClick(System.Object,System.EventArgs)">
+            <summary>テキストボックスのダブルクリック</summary>
+        </member>
+        <member name="M:NCSEND2.Form1.Text1_DragEnter(System.Object,System.Windows.Forms.DragEventArgs)">
+            <summary>テキストボックスのドラッグ＆ドロップ</summary>
+        </member>
+        <member name="M:NCSEND2.Form1.Text1_DragDrop(System.Object,System.Windows.Forms.DragEventArgs)">
+            <summary>テキストボックスのドラッグ＆ドロップ</summary>
+        </member>
+        <member name="M:NCSEND2.Form1.Creat_ncDataSet(System.Boolean)">
+            <summary>
+            ＮＣ情報のあるフォルダーを指定した時に実行する。
+            その情報を解析しNcInfo（工具単位情報を含むXMLなど）を作成する
+            </summary>
+        </member>
+        <member name="M:NCSEND2.Form1.RadioButton_Click(System.Object,System.EventArgs)">
+            <summary>
+            ＣＡＭシステムの選択のイベント
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:NCSEND2.Form1.ComboBox1_TextChanged(System.Object,System.EventArgs)">
+            <summary>
+            材質選択のイベント
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:NCSEND2.Form1.ToolBunk_CheckedChanged(System.Object,System.EventArgs)">
+            <summary>
+            工具分割設定のイベント
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:NCSEND2.Form1.ButtonCalc_Click(System.Object,System.EventArgs)">
+            <summary>
+            加工長再計算
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:NCSEND2.Form1.ListView1_AfterLabelEdit(System.Object,System.Windows.Forms.LabelEditEventArgs)">
+            <summary>
+            リストビューのイベント
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:NCSEND2.Form1.送信ToolStripMenuItem_Click(System.Object,System.EventArgs)">
+            <summary>
+            ＮＣデータなどの送信イベント
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:NCSEND2.Form1.Output(System.String)">
+            <summary>
+            ＮＣデータなどの変換・送信処理
+            </summary>
+            <param name="aim">ＮＣデータ作成の目的</param>
+        </member>
+        <member name="M:NCSEND2.Form1.ToolStripButtonTSet_Click(System.Object,System.EventArgs)">
+            <summary>
+            ツールセットＣＡＭと突出し量の変更
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:NCSEND2.Form1.ToolStripButtonHelical_Click(System.Object,System.EventArgs)">
+            <summary>
+            ヘリカル変換の実行
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:NCSEND2.Form1.ToolStripButton2_Click(System.Object,System.EventArgs)">
+            <summary>
+            工具単位リストビューの表示
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:NCSEND2.Form1.ToolStripMenuItemTSet_Click(System.Object,System.EventArgs)">
+            <summary>
+            ツールセットＣＡＭと突出し量の変更
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="F:NCSEND2.Form1.components">
+            <summary>
+            必要なデザイナ変数です。
+            </summary>
+        </member>
+        <member name="M:NCSEND2.Form1.Dispose(System.Boolean)">
+            <summary>
+            使用中のリソースをすべてクリーンアップします。
+            </summary>
+            <param name="disposing">マネージ リソースが破棄される場合 true、破棄されない場合は false です。</param>
+        </member>
+        <member name="M:NCSEND2.Form1.InitializeComponent">
+            <summary>
+            デザイナ サポートに必要なメソッドです。このメソッドの内容を
+            コード エディタで変更しないでください。
+            </summary>
+        </member>
+        <member name="T:NCSEND2.FormLView">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:NCSEND2.FormLView.#ctor(System.Collections.Generic.List{NCSEND2.NCINFO.NcInfoCam})">
+            <summary>
+            
+            </summary>
+            <param name="ncDataSet"></param>
+        </member>
+        <member name="F:NCSEND2.FormLView.components">
+            <summary>
+            必要なデザイナ変数です。
+            </summary>
+        </member>
+        <member name="M:NCSEND2.FormLView.Dispose(System.Boolean)">
+            <summary>
+            使用中のリソースをすべてクリーンアップします。
+            </summary>
+            <param name="disposing">マネージ リソースが破棄される場合 true、破棄されない場合は false です。</param>
+        </member>
+        <member name="M:NCSEND2.FormLView.InitializeComponent">
+            <summary>
+            デザイナ サポートに必要なメソッドです。このメソッドの内容を
+            コード エディタで変更しないでください。
+            </summary>
+        </member>
+        <member name="T:NCSEND2.FormSplash">
+            <summary>
+            スプラッシュウィンドウクラス
+            </summary>
+        </member>
+        <member name="M:NCSEND2.FormSplash.#ctor">
+            <summary>
+            コンストラクタ
+            </summary>
+        </member>
+        <member name="F:NCSEND2.FormSplash.components">
+            <summary>
+            必要なデザイナ変数です。
+            </summary>
+        </member>
+        <member name="M:NCSEND2.FormSplash.Dispose(System.Boolean)">
+            <summary>
+            使用中のリソースをすべてクリーンアップします。
+            </summary>
+            <param name="disposing">マネージ リソースが破棄される場合 true、破棄されない場合は false です。</param>
+        </member>
+        <member name="M:NCSEND2.FormSplash.InitializeComponent">
+            <summary>
+            デザイナ サポートに必要なメソッドです。このメソッドの内容を
+            コード エディタで変更しないでください。
+            </summary>
+        </member>
+        <member name="F:NCSEND2.FormSplash.label1">
+            <summary>スプラッシュのコメント表示領域</summary>
+        </member>
+        <member name="T:NCSEND2.KYDATA.ItemNcdt">
+            <summary>ＮＣデータの情報</summary>
+        </member>
+        <member name="F:NCSEND2.KYDATA.ItemNcdt.ProcessName">
+            <summary>0 プロセス名（車両部品名として使用 etc. MTO123AGRL）</summary>
+        </member>
+        <member name="F:NCSEND2.KYDATA.ItemNcdt.PartOperationName">
+            <summary>ケーラムは加工グループ名として使用</summary>
+        </member>
+        <member name="F:NCSEND2.KYDATA.ItemNcdt.ProductsName">
+            <summary>金型の部品名（編集名として使用する）</summary>
+        </member>
+        <member name="F:NCSEND2.KYDATA.ItemNcdt.CoordinatesName">
+            <summary>未使用（CADmeister Dynavista2D のみ設定あり）</summary>
+        </member>
+        <member name="F:NCSEND2.KYDATA.ItemNcdt.PostProcessorName">
+            <summary>  ポストプロセッサ名</summary>
+        </member>
+        <member name="F:NCSEND2.KYDATA.ItemNcdt.PostProcessorVersion">
+            <summary>  ポストプロセッサのバージョン</summary>
+        </member>
+        <member name="F:NCSEND2.KYDATA.ItemNcdt.machineHeadName">
+            <summary>  ＣＡＭで干渉チェックに使用されたマシンヘッド名（Tebis）</summary>
+        </member>
+        <member name="F:NCSEND2.KYDATA.ItemNcdt.OriginXYZ">
+            <summary>  加工原点ＸＹＺ</summary>
+        </member>
+        <member name="F:NCSEND2.KYDATA.ItemNcdt.camMaterial">
+            <summary>1 ＮＣデータ作成時の材質設定</summary>
+        </member>
+        <member name="T:NCSEND2.KYDATA.ItemTool">
+            <summary>工具の情報（工具単位）</summary>
+        </member>
+        <member name="F:NCSEND2.KYDATA.ItemTool.ToolSetName">
+            <summary>1 ツールセットＣＡＭ名</summary>
+        </member>
+        <member name="F:NCSEND2.KYDATA.ItemTool.ToolTypeCam">
+            <summary>1 ＣＡＭシステムの工具種類</summary>
+        </member>
+        <member name="F:NCSEND2.KYDATA.ItemTool.ProcessDiscrimination">
+            <summary>  工程区分（NCSPEED用）</summary>
+        </member>
+        <member name="F:NCSEND2.KYDATA.ItemTool.ToolDiameter">
+            <summary>工具の外径</summary>
+        </member>
+        <member name="F:NCSEND2.KYDATA.ItemTool.ToolCornerRadius">
+            <summary>工具のコーナー半径</summary>
+        </member>
+        <member name="F:NCSEND2.KYDATA.ItemTool.ToolDiameter_in">
+            <summary>工具の内径</summary>
+        </member>
+        <member name="T:NCSEND2.KYDATA.ItemKotei">
+            <summary>工程の情報（工程単位）</summary>
+        </member>
+        <member name="F:NCSEND2.KYDATA.ItemKotei.Name">
+            <summary>1 工程名（ＸＭＬ必須）</summary>
+        </member>
+        <member name="F:NCSEND2.KYDATA.ItemKotei.Type">
+            <summary>  工程タイプ</summary>
+        </member>
+        <member name="F:NCSEND2.KYDATA.ItemKotei.Class">
+            <summary>  工程区分</summary>
+        </member>
+        <member name="F:NCSEND2.KYDATA.ItemKotei.CuttingDirection">
+            <summary>1 加工方向</summary>
+        </member>
+        <member name="F:NCSEND2.KYDATA.ItemKotei.MachiningMethod">
+            <summary>1 加工法</summary>
+        </member>
+        <member name="F:NCSEND2.KYDATA.ItemKotei.NcCycle">
+            <summary>  工程のＮＣサイクル名</summary>
+        </member>
+        <member name="F:NCSEND2.KYDATA.ItemKotei.Tolerance">
+            <summary>1 トレランス（すべて未指定、工程間不一致の場合 null）</summary>
+        </member>
+        <member name="F:NCSEND2.KYDATA.ItemKotei.PickZ">
+            <summary>1 Ｚピック（すべて未指定、工程間不一致の場合 null）</summary>
+        </member>
+        <member name="F:NCSEND2.KYDATA.ItemKotei.PickX">
+            <summary>1 XYピック（すべて未指定、工程間不一致の場合 null）</summary>
+        </member>
+        <member name="F:NCSEND2.KYDATA.ItemKotei.WallThicknessZ">
+            <summary>1 Ｚ残し量（すべて未指定、工程間不一致の場合 null）</summary>
+        </member>
+        <member name="F:NCSEND2.KYDATA.ItemKotei.WallThicknessX">
+            <summary>1 XY残し量（すべて未指定、工程間不一致の場合 null）</summary>
+        </member>
+        <member name="F:NCSEND2.KYDATA.ItemKotei.FeedLength">
+            <summary>1 加工長mm</summary>
+        </member>
+        <member name="F:NCSEND2.KYDATA.ItemKotei.NonFeedLength">
+            <summary>早送り移動長さmm</summary>
+        </member>
+        <member name="F:NCSEND2.KYDATA.ItemKotei.FeedTime">
+            <summary>1 加工時間min</summary>
+        </member>
+        <member name="F:NCSEND2.KYDATA.ItemKotei.NonFeedTime">
+            <summary>  早送り時間min</summary>
+        </member>
+        <member name="F:NCSEND2.KYDATA.ItemKotei.CuttingFeedRate_CSV">
+            <summary>1 ＮＣデータの送り速度mm/min（==NCSEND2実行時のＤＢの値）</summary>
+        </member>
+        <member name="F:NCSEND2.KYDATA.ItemKotei.SpindleSpeed_CSV">
+            <summary>1 ＮＣデータの回転数min-1   （==NCSEND2実行時のＤＢの値）</summary>
+        </member>
+        <member name="F:NCSEND2.KYDATA.ItemKotei.ToolUsableLength">
+            <summary>工具の首下の長さ（有効長）</summary>
+        </member>
+        <member name="F:NCSEND2.KYDATA.ItemKotei.ToolReferencePoint">
+            <summary>工具のＮＣデータ参照点（先端tipあるいはボール中心center）</summary>
+        </member>
+        <member name="F:NCSEND2.KYDATA.ItemKotei.PostComment">
+            <summary>  ＮＣデータ出力時に入力されたコメント（Tebis）</summary>
+        </member>
+        <member name="F:NCSEND2.KYDATA.ItemKotei.Approach">
+            <summary>アプローチの送り速度</summary>
+        </member>
+        <member name="F:NCSEND2.KYDATA.ItemKotei.Retract">
+            <summary>リトラクトの送り速度</summary>
+        </member>
+        <member name="T:NCSEND2.KYDATA.ItemAxis">
+            <summary>回転軸の情報</summary>
+        </member>
+        <member name="F:NCSEND2.KYDATA.ItemAxis.AxisControlledMotion">
+            <summary></summary>
+        </member>
+        <member name="F:NCSEND2.KYDATA.ItemAxis.ClearancePlane">
+            <summary></summary>
+        </member>
+        <member name="F:NCSEND2.KYDATA.ItemAxis.AxisType">
+            <summary></summary>
+        </member>
+        <member name="F:NCSEND2.KYDATA.ItemAxis.AxisAngle">
+            <summary></summary>
+        </member>
+        <member name="M:NCSEND2.KYDATA.KyData.CreateKakoYoryo(System.String,CamUtil.CamSystem,System.Nullable{System.Double})">
+            <summary>
+            加工要領書を読み込むためのKyData クラスを作成する
+            </summary>
+            <param name="dnam">加工要領書のあるディレクトリ名</param>
+            <param name="camSystem">ＣＡＭシステム名</param>
+            <param name="originTextbox">テキストボックスで指示されたクリアランスＺ高さ（Dynavvista2D でのみ使用）</param>
+            <returns></returns>
+        </member>
+        <member name="F:NCSEND2.KYDATA.KyData.TaoreHoseiHanni">
+            <summary>倒れ補正として処理する最小値</summary>
+        </member>
+        <member name="P:NCSEND2.KYDATA.KyData.CSV">
+            <summary>ＣＳＶのデータより作成された KyData の場合</summary>
+        </member>
+        <member name="P:NCSEND2.KYDATA.KyData.Buhin">
+            <summary>部品加工か否か</summary>
+        </member>
+        <member name="P:NCSEND2.KYDATA.KyData.CountTool">
+            <summary>ファイル内の工具数</summary>
+        </member>
+        <member name="P:NCSEND2.KYDATA.KyData.CountKotei">
+            <summary>ファイル内の工程数</summary>
+        </member>
+        <member name="P:NCSEND2.KYDATA.KyData.FulName">
+            <summary>加工要領書のフルファイル名</summary>
+        </member>
+        <member name="M:NCSEND2.KYDATA.KyData.TSName(System.Int32)">
+            <summary>ＣＡＭで指定されたToolSetCAM の名称</summary>
+        </member>
+        <member name="P:NCSEND2.KYDATA.KyData.Dimension">
+            <summary>ＣＡＭの次元</summary>
+        </member>
+        <member name="M:NCSEND2.KYDATA.KyData.MaxCLR">
+            <summary>最大クリアランスプレーン</summary>
+        </member>
+        <member name="P:NCSEND2.KYDATA.KyData.CamOutputDate">
+            <summary>1 ＮＣデータ出力日</summary>
+        </member>
+        <member name="F:NCSEND2.KYDATA.KyData.OrgZ">
+            <summary>加工開始点のＺ高さ</summary>
+        </member>
+        <member name="P:NCSEND2.KYDATA.KyData.TaoreList">
+            <summary>倒れ補正量のリスト</summary>
+        </member>
+        <member name="F:NCSEND2.KYDATA.KyData.nsgt2">
+            <summary>ＮＣデータ全体の情報を保存するリスト</summary>
+        </member>
+        <member name="F:NCSEND2.KYDATA.KyData.nsgt1">
+            <summary>各加工工程の情報を保存するリスト</summary>
+        </member>
+        <member name="M:NCSEND2.KYDATA.KyData.Divide(System.String)">
+            <summary>
+            １工程（ＣＳＶ１行）ごとに分解する。情報は元と共有している
+            </summary>
+            <param name="suff">フルファイル名作成の後ろに追加する文字列</param>
+            <returns>分割された新たなKyData</returns>
+        </member>
+        <member name="M:NCSEND2.KYDATA.KyData.Divide_Tool">
+            <summary>工具単位に分解する</summary>
+        </member>
+        <member name="M:NCSEND2.KYDATA.KyData.Divide_Axis">
+            <summary>軸単位に分解する</summary>
+        </member>
+        <member name="M:NCSEND2.KYDATA.KyData.CountColumn1">
+            <summary>ＣＳＶの最大コラム数1</summary>
+        </member>
+        <member name="M:NCSEND2.KYDATA.KyData.CountColumn2">
+            <summary>ＣＳＶの最大コラム数2</summary>
+        </member>
+        <member name="M:NCSEND2.KYDATA.KyData.LVItems(System.Int32,System.Int32)">
+            <summary>
+            リストビューアイテムを取得する
+            </summary>
+            <param name="columnNo1"></param>
+            <param name="columnNo2"></param>
+            <returns></returns>
+        </member>
+        <member name="T:NCSEND2.KYDATA.KyData_CADCEUS">
+            <summary>
+            CADCEUS, WorkNC の加工要領書内の情報（１ＮＣデータ１工具が前提）
+            </summary>
+        </member>
+        <member name="M:NCSEND2.KYDATA.KyData_CADCEUS.#ctor(System.String)">
+            <summary>
+            ＣＡＤＣＥＵＳのＮＣデータ情報の取得
+            </summary>
+            <param name="fnam">フルファイル名</param>
+        </member>
+        <member name="P:NCSEND2.KYDATA.KyData_CADCEUS.CamOutputDate">
+            <summary>1 ＮＣデータ出力日</summary>
+        </member>
+        <member name="M:NCSEND2.KYDATA.KyData_CADCEUS.TSName(System.Int32)">
+            <summary>ＣＡＭで指定されたToolSetCAM の名称</summary>
+        </member>
+        <member name="P:NCSEND2.KYDATA.KyData_CADCEUS.Dimension">
+            <summary>次元を求める</summary>
+        </member>
+        <member name="P:NCSEND2.KYDATA.KyData_CADCEUS.TaoreList">
+            <summary>倒れ補正量のリスト</summary>
+        </member>
+        <member name="M:NCSEND2.KYDATA.KyData_CADCEUS.Divide_Tool">
+            <summary>工具単位に分解する</summary>
+        </member>
+        <member name="M:NCSEND2.KYDATA.KyData_CADCEUS.Divide_Axis">
+            <summary>軸単位に分解する</summary>
+        </member>
+        <member name="M:NCSEND2.KYDATA.KyData_CADCEUS.Set_TSETCAM(System.String)">
+            <summary>TSETCAM名をセットする</summary>
+        </member>
+        <member name="P:NCSEND2.KYDATA.KyData_CADCEUS.CsvToolDiam">
+            <summary>工具直径</summary>
+        </member>
+        <member name="P:NCSEND2.KYDATA.KyData_CADCEUS.CsvToolRadi">
+            <summary>コーナー半径</summary>
+        </member>
+        <member name="P:NCSEND2.KYDATA.KyData_CADCEUS.StKyData.Diam">
+            <summary>工具の直径</summary>
+        </member>
+        <member name="P:NCSEND2.KYDATA.KyData_CADCEUS.StKyData.Crad">
+            <summary>工具のコーナーＲ</summary>
+        </member>
+        <member name="F:NCSEND2.KYDATA.KyData_CADCEUS.StKyData.FEEDRPD">
+            <summary>早送り（[0]:LENGTH(mm), [1]:TIME(min)）</summary>
+        </member>
+        <member name="F:NCSEND2.KYDATA.KyData_CADCEUS.StKyData.FEEDCUT">
+            <summary>切削送り（[0]:LENGTH(mm), [1]:TIME(min)）</summary>
+        </member>
+        <member name="F:NCSEND2.KYDATA.KyData_CADCEUS.StKyData.REFP">
+            <summary>工具参照点（"Tip" or "Center"）</summary>
+        </member>
+        <member name="F:NCSEND2.KYDATA.KyData_CADCEUS.StKyData.ROTARY">
+            <summary>旋回軸の角度</summary>
+        </member>
+        <member name="F:NCSEND2.KYDATA.KyData_CADCEUS.StKyData.POST">
+            <summary>ポスト名</summary>
+        </member>
+        <member name="M:NCSEND2.KYDATA.KyData_CADCEUS.StKyData.LsOut">
+            <summary>
+            ストリングリストの出力
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:NCSEND2.KYDATA.KyData_CADCEUS.StKyData.#ctor(System.String)">
+            <summary>
+            ＣＡＤＣＥＵＳのＮＣデータ情報の取得
+            </summary>
+            <param name="fnam">フルファイル名</param>
+        </member>
+        <member name="T:NCSEND2.KYDATA.KyData_CADmeisterKDK">
+            <summary>
+            TEBIS, Dynavista2D, CAMTOOL の加工情報[不変]
+            </summary>
+        </member>
+        <member name="F:NCSEND2.KYDATA.KyData_CADmeisterKDK.tsetCamName">
+            <summary>CADmeisterKでツールセットＣＡＭの手動設定のデータを保存する add in 2013/2/28</summary>
+        </member>
+        <member name="M:NCSEND2.KYDATA.KyData_CADmeisterKDK.#ctor(System.String)">
+            <summary>
+            コンストラクタ（ＣＳＶ）
+            </summary>
+            <param name="fnam">フルファイル名</param>
+        </member>
+        <member name="P:NCSEND2.KYDATA.KyData_CADmeisterKDK.CamOutputDate">
+            <summary>1 ＮＣデータ出力日</summary>
+        </member>
+        <member name="M:NCSEND2.KYDATA.KyData_CADmeisterKDK.TSName(System.Int32)">
+            <summary>ＣＡＭで指定されたToolSetCAM の名称</summary>
+        </member>
+        <member name="P:NCSEND2.KYDATA.KyData_CADmeisterKDK.Dimension">
+            <summary>次元を求める</summary>
+        </member>
+        <member name="P:NCSEND2.KYDATA.KyData_CADmeisterKDK.TaoreList">
+            <summary>倒れ補正量のリスト</summary>
+        </member>
+        <member name="M:NCSEND2.KYDATA.KyData_CADmeisterKDK.Divide_Tool">
+            <summary>工具単位に分解する</summary>
+        </member>
+        <member name="M:NCSEND2.KYDATA.KyData_CADmeisterKDK.Divide_Axis">
+            <summary>軸単位に分解する</summary>
+        </member>
+        <member name="P:NCSEND2.KYDATA.KyData_CADmeisterKDK.CsvToolName">
+            <summary>工具名</summary>
+        </member>
+        <member name="P:NCSEND2.KYDATA.KyData_CADmeisterKDK.CsvHoldName">
+            <summary>ホルダー名</summary>
+        </member>
+        <member name="P:NCSEND2.KYDATA.KyData_CADmeisterKDK.CsvTsukiRyo">
+            <summary>突き出し量</summary>
+        </member>
+        <member name="T:NCSEND2.KYDATA.KyData_CAMTOOL">
+            <summary>
+            CAMTOOL の加工情報[不変]
+            </summary>
+        </member>
+        <member name="M:NCSEND2.KYDATA.KyData_CAMTOOL.#ctor(System.String)">
+            <summary>
+            コンストラクタ（ＣＳＶ）
+            </summary>
+            <param name="fnam">フルファイル名</param>
+        </member>
+        <member name="P:NCSEND2.KYDATA.KyData_CAMTOOL.CamOutputDate">
+            <summary>1 ＮＣデータ出力日</summary>
+        </member>
+        <member name="M:NCSEND2.KYDATA.KyData_CAMTOOL.TSName(System.Int32)">
+            <summary>ＣＡＭで指定されたToolSetCAM の名称</summary>
+        </member>
+        <member name="P:NCSEND2.KYDATA.KyData_CAMTOOL.Dimension">
+            <summary>次元を求める</summary>
+        </member>
+        <member name="P:NCSEND2.KYDATA.KyData_CAMTOOL.TaoreList">
+            <summary>倒れ補正量のリスト</summary>
+        </member>
+        <member name="M:NCSEND2.KYDATA.KyData_CAMTOOL.Divide_Tool">
+            <summary>工具単位に分解する</summary>
+        </member>
+        <member name="M:NCSEND2.KYDATA.KyData_CAMTOOL.Divide_Axis">
+            <summary>軸単位に分解する</summary>
+        </member>
+        <member name="T:NCSEND2.KYDATA.KyData_CAMTOOL_5AXIS">
+            <summary>
+            CAMTOOL_5AXIS の加工情報[不変]
+            </summary>
+        </member>
+        <member name="M:NCSEND2.KYDATA.KyData_CAMTOOL_5AXIS.#ctor(System.String)">
+            <summary>
+            コンストラクタ（ＣＳＶ）
+            </summary>
+            <param name="fnam">フルファイル名</param>
+        </member>
+        <member name="P:NCSEND2.KYDATA.KyData_CAMTOOL_5AXIS.CamOutputDate">
+            <summary>1 ＮＣデータ出力日</summary>
+        </member>
+        <member name="M:NCSEND2.KYDATA.KyData_CAMTOOL_5AXIS.TSName(System.Int32)">
+            <summary>ＣＡＭで指定されたToolSetCAM の名称</summary>
+        </member>
+        <member name="P:NCSEND2.KYDATA.KyData_CAMTOOL_5AXIS.Dimension">
+            <summary>次元を求める</summary>
+        </member>
+        <member name="P:NCSEND2.KYDATA.KyData_CAMTOOL_5AXIS.TaoreList">
+            <summary>倒れ補正量のリスト</summary>
+        </member>
+        <member name="M:NCSEND2.KYDATA.KyData_CAMTOOL_5AXIS.Divide_Tool">
+            <summary>工具単位に分解する</summary>
+        </member>
+        <member name="M:NCSEND2.KYDATA.KyData_CAMTOOL_5AXIS.Divide_Axis">
+            <summary>軸単位に分解する</summary>
+        </member>
+        <member name="T:NCSEND2.KYDATA.KyData_Dynavista2D">
+            <summary>
+            Dynavbista2Dの加工情報[不変]
+            </summary>
+        </member>
+        <member name="F:NCSEND2.KYDATA.KyData_Dynavista2D.Target">
+            <summary>Dynavista2Dの*.logファイル内にあるTarget情報 ADD in 2013/04/04</summary>
+        </member>
+        <member name="M:NCSEND2.KYDATA.KyData_Dynavista2D.#ctor(System.String,System.Double)">
+            <summary>
+            コンストラクタ（ＣＳＶ）
+            </summary>
+            <param name="fnam">フルファイル名</param>
+            <param name="originTextbox">テキストボックスで指示されたクリアランスＺ高さ</param>
+        </member>
+        <member name="M:NCSEND2.KYDATA.KyData_Dynavista2D.CheckKotei(System.Collections.Generic.List{System.String},System.Collections.Generic.List{NCSEND2.NCINFO.NcInfoCam.MessageData},NCSEND2.NCINFO.TSetCAM)">
+            <summary>単一工具である KyData の工程情報の整合性をチェックする</summary>
+        </member>
+        <member name="P:NCSEND2.KYDATA.KyData_Dynavista2D.CamOutputDate">
+            <summary>1 ＮＣデータ出力日</summary>
+        </member>
+        <member name="M:NCSEND2.KYDATA.KyData_Dynavista2D.TSName(System.Int32)">
+            <summary>ＣＡＭで指定されたToolSetCAM の名称</summary>
+        </member>
+        <member name="P:NCSEND2.KYDATA.KyData_Dynavista2D.TaoreList">
+            <summary>倒れ補正量のリスト</summary>
+        </member>
+        <member name="M:NCSEND2.KYDATA.KyData_Dynavista2D.Divide_Tool">
+            <summary>工具単位に分解する</summary>
+        </member>
+        <member name="M:NCSEND2.KYDATA.KyData_Dynavista2D.Divide_Axis">
+            <summary>軸単位に分解する</summary>
+        </member>
+        <member name="P:NCSEND2.KYDATA.KyData_Dynavista2D.Dimension">
+            <summary>次元を求める</summary>
+        </member>
+        <member name="T:NCSEND2.KYDATA.KyData_Tebis">
+            <summary>
+            TEBISの加工情報[不変]
+            </summary>
+        </member>
+        <member name="M:NCSEND2.KYDATA.KyData_Tebis.PostCode31(System.String[])">
+            <summary>マシンヘッドの情報をnsgt1から取得する</summary>
+        </member>
+        <member name="M:NCSEND2.KYDATA.KyData_Tebis.#ctor(System.String)">
+            <summary>
+            コンストラクタ（ＣＳＶ）
+            </summary>
+            <param name="fnam">フルファイル名</param>
+        </member>
+        <member name="M:NCSEND2.KYDATA.KyData_Tebis.CheckKotei(System.Collections.Generic.List{NCSEND2.NCINFO.NcInfoCam.MessageData})">
+            <summary>単一工具である KyData の工程情報の整合性をチェックする</summary>
+            <param name="messData"></param>
+        </member>
+        <member name="P:NCSEND2.KYDATA.KyData_Tebis.CamOutputDate">
+            <summary>1 ＮＣデータ出力日</summary>
+        </member>
+        <member name="M:NCSEND2.KYDATA.KyData_Tebis.TSName(System.Int32)">
+            <summary>ＣＡＭで指定されたToolSetCAM の名称</summary>
+        </member>
+        <member name="P:NCSEND2.KYDATA.KyData_Tebis.TaoreList">
+            <summary>倒れ補正量のリスト</summary>
+        </member>
+        <member name="M:NCSEND2.KYDATA.KyData_Tebis.Divide_Tool">
+            <summary>工具単位に分解する</summary>
+        </member>
+        <member name="M:NCSEND2.KYDATA.KyData_Tebis.Divide_Tool(System.Boolean)">
+            <summary>
+            工具単位に分解する。倒れ補正ごとにも分解する場合はdivTaoreをTrueに設定する
+            </summary>
+            <param name="divTaore">True の場合倒れ補正ごとの分解も実行する</param>
+            <returns></returns>
+        </member>
+        <member name="M:NCSEND2.KYDATA.KyData_Tebis.Divide_Axis">
+            <summary>軸単位に分解する</summary>
+        </member>
+        <member name="P:NCSEND2.KYDATA.KyData_Tebis.Dimension">
+            <summary>次元を求める</summary>
+        </member>
+        <member name="M:NCSEND2.KYDATA.KyData_Tebis.DimensionSub(System.String[])">
+            <summary>
+            Tebisの次元を求める
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:NCSEND2.KYDATA.KyData_WorkNC">
+            <summary>
+            CADCEUS, WorkNC の加工要領書内の情報（１ＮＣデータ１工具が前提）
+            </summary>
+        </member>
+        <member name="M:NCSEND2.KYDATA.KyData_WorkNC.#ctor(System.String,System.Double[])">
+            <summary>
+            ＷＯＲＫＮＣnewのＮＣデータ情報の取得
+            </summary>
+            <param name="fnam">フルファイル名</param>
+            <param name="homep"></param>
+        </member>
+        <member name="P:NCSEND2.KYDATA.KyData_WorkNC.CamOutputDate">
+            <summary>1 ＮＣデータ出力日</summary>
+        </member>
+        <member name="M:NCSEND2.KYDATA.KyData_WorkNC.TSName(System.Int32)">
+            <summary>ＣＡＭで指定されたToolSetCAM の名称</summary>
+        </member>
+        <member name="P:NCSEND2.KYDATA.KyData_WorkNC.Dimension">
+            <summary>次元を求める</summary>
+        </member>
+        <member name="P:NCSEND2.KYDATA.KyData_WorkNC.TaoreList">
+            <summary>倒れ補正量のリスト</summary>
+        </member>
+        <member name="M:NCSEND2.KYDATA.KyData_WorkNC.Divide_Tool">
+            <summary>工具単位に分解する</summary>
+        </member>
+        <member name="M:NCSEND2.KYDATA.KyData_WorkNC.Divide_Axis">
+            <summary>軸単位に分解する</summary>
+        </member>
+        <member name="P:NCSEND2.KYDATA.KyData_WorkNC.StKyData.Diam">
+            <summary>工具の直径</summary>
+        </member>
+        <member name="P:NCSEND2.KYDATA.KyData_WorkNC.StKyData.Crad">
+            <summary>工具のコーナーＲ</summary>
+        </member>
+        <member name="F:NCSEND2.KYDATA.KyData_WorkNC.StKyData.FEEDRPD">
+            <summary>早送り（[0]:LENGTH(mm), [1]:TIME(min)）</summary>
+        </member>
+        <member name="F:NCSEND2.KYDATA.KyData_WorkNC.StKyData.FEEDCUT">
+            <summary>切削送り（[0]:LENGTH(mm), [1]:TIME(min)）</summary>
+        </member>
+        <member name="F:NCSEND2.KYDATA.KyData_WorkNC.StKyData.REFP">
+            <summary>工具参照点（"Tip" or "Center"）</summary>
+        </member>
+        <member name="F:NCSEND2.KYDATA.KyData_WorkNC.StKyData.ROTARY">
+            <summary>旋回軸の角度</summary>
+        </member>
+        <member name="F:NCSEND2.KYDATA.KyData_WorkNC.StKyData.POST">
+            <summary>ポスト名</summary>
+        </member>
+        <member name="M:NCSEND2.KYDATA.KyData_WorkNC.StKyData.LsOut">
+            <summary>
+            ストリングリストの出力
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:NCSEND2.KYDATA.KyData_WorkNC.StKyData.#ctor(System.String,System.Double[])">
+            <summary>
+            ＷＯＲＫＮＣnewのＮＣデータ情報の取得
+            </summary>
+            <param name="fnam">フルファイル名</param>
+            <param name="homep"></param>
+        </member>
+        <member name="F:NCSEND2.KYDATA.FormCsvData.components">
+            <summary>
+            必要なデザイナ変数です。
+            </summary>
+        </member>
+        <member name="M:NCSEND2.KYDATA.FormCsvData.Dispose(System.Boolean)">
+            <summary>
+            使用中のリソースをすべてクリーンアップします。
+            </summary>
+            <param name="disposing">マネージ リソースが破棄される場合 true、破棄されない場合は false です。</param>
+        </member>
+        <member name="M:NCSEND2.KYDATA.FormCsvData.InitializeComponent">
+            <summary>
+            デザイナ サポートに必要なメソッドです。このメソッドの内容を
+            コード エディタで変更しないでください。
+            </summary>
+        </member>
+        <member name="T:NCSEND2.KYDATA.FormSelTset">
+            <summary>
+            NcConv_TSetCAMのDataRowよりツールセットＣＡＭを選択するフォームを作成する
+            </summary>
+        </member>
+        <member name="F:NCSEND2.KYDATA.FormSelTset.labW">
+            <summary>行表題の幅</summary>
+        </member>
+        <member name="F:NCSEND2.KYDATA.FormSelTset.kakW">
+            <summary>加工工程名の幅</summary>
+        </member>
+        <member name="F:NCSEND2.KYDATA.FormSelTset.tsuW">
+            <summary>突出し量の幅</summary>
+        </member>
+        <member name="F:NCSEND2.KYDATA.FormSelTset.space">
+            <summary>間隔</summary>
+        </member>
+        <member name="F:NCSEND2.KYDATA.FormSelTset.camSystemName">
+            <summary>実行中のＣＡＭシステム名</summary>
+        </member>
+        <member name="F:NCSEND2.KYDATA.FormSelTset.kyList">
+            <summary>ＫＹデータへのリンク（入出力に使用）</summary>
+        </member>
+        <member name="F:NCSEND2.KYDATA.FormSelTset.tSetCamList">
+            <summary>選択結果を保存する場所</summary>
+        </member>
+        <member name="F:NCSEND2.KYDATA.FormSelTset.motoListtset">
+            <summary>現在の設定値</summary>
+        </member>
+        <member name="F:NCSEND2.KYDATA.FormSelTset.comb">
+            <summary>ツールセットＣＡＭ選択用のコンボボックスのリスト</summary>
+        </member>
+        <member name="F:NCSEND2.KYDATA.FormSelTset.txtb">
+            <summary>突出し量設定用のテキストボックスのリスト</summary>
+        </member>
+        <member name="M:NCSEND2.KYDATA.FormSelTset.#ctor(System.String,System.Collections.Generic.List{NCSEND2.KYDATA.KyData})">
+            <summary>
+            ツールセットＣＡＭを選択するフォームのコンストラクタ（ＣＡＤＣＥＵＳ、CADmeisterK用）add in 2019/05/07
+            </summary>
+            <param name="camSystemName"></param>
+            <param name="p_kyList"></param>
+        </member>
+        <member name="M:NCSEND2.KYDATA.FormSelTset.#ctor(System.Collections.Generic.List{NCSEND2.NCINFO.NcInfoCam},System.String)">
+            <summary>
+            ツールセットＣＡＭを選択するフォームのコンストラクタ（変更用）
+            </summary>
+            <param name="p_kyList"></param>
+            <param name="pCamSystemName"></param>
+        </member>
+        <member name="M:NCSEND2.KYDATA.FormSelTset.Label_Combo(System.String[],System.Collections.Generic.List{System.Data.DataRow}[])">
+            <summary>
+            表示と結果のリストを作成する
+            </summary>
+            <param name="flNameL">項目名のリスト</param>
+            <param name="tsNameL">選択するNcConv_TsetCamのDataRowリスト</param>
+        </member>
+        <member name="M:NCSEND2.KYDATA.FormSelTset.SetDispTable(System.Collections.Generic.List{System.Data.DataRow})">
+            <summary>
+            ツールセットＣＡＭ名から表示用テーブルを作成する
+            </summary>
+            <param name="ts_koho"></param>
+            <returns></returns>
+        </member>
+        <member name="F:NCSEND2.KYDATA.FormSelTset.components">
+            <summary>
+            必要なデザイナ変数です。
+            </summary>
+        </member>
+        <member name="M:NCSEND2.KYDATA.FormSelTset.Dispose(System.Boolean)">
+            <summary>
+            使用中のリソースをすべてクリーンアップします。
+            </summary>
+            <param name="disposing">マネージ リソースが破棄される場合 true、破棄されない場合は false です。</param>
+        </member>
+        <member name="M:NCSEND2.KYDATA.FormSelTset.InitializeComponent">
+            <summary>
+            デザイナ サポートに必要なメソッドです。このメソッドの内容を
+            コード エディタで変更しないでください。
+            </summary>
+        </member>
+        <member name="T:NCSEND2.LView.MList">
+            <summary></summary>
+        </member>
+        <member name="T:NCSEND2.NCINFO.NcInfoCam">
+            <summary>
+            ＮＣＳＥＮＤ２で使用する詳細なＮＣデータ１ファイル＆複数工具の情報（NC, XML, ToolSsetCam）
+            </summary>
+        </member>
+        <member name="F:NCSEND2.NCINFO.NcInfoCam.BuhinName">
+            <summary>部品加工の場合に使用するファイル名の先頭５文字</summary>
+        </member>
+        <member name="M:NCSEND2.NCINFO.NcInfoCam.CompareName(NCSEND2.NCINFO.NcInfoCam,NCSEND2.NCINFO.NcInfoCam)">
+            <summary>データ作成順</summary>
+        </member>
+        <member name="M:NCSEND2.NCINFO.NcInfoCam.CompareTime(NCSEND2.NCINFO.NcInfoCam,NCSEND2.NCINFO.NcInfoCam)">
+            <summary>データ作成順</summary>
+        </member>
+        <member name="M:NCSEND2.NCINFO.NcInfoCam.CompareText(NCSEND2.NCINFO.NcInfoCam,NCSEND2.NCINFO.NcInfoCam)">
+            <summary>データ出力時に作成されるテキストファイルの順 ADD in 2015/07/16</summary>
+        </member>
+        <member name="M:NCSEND2.NCINFO.NcInfoCam.TextSortSet(System.Collections.Generic.List{NCSEND2.NCINFO.NcInfoCam},System.String)">
+            <summary>
+            部品加工のＴＸＴファイルの内容からＮＣデータ名のリストを取得する
+            </summary>
+            <param name="list"></param>
+            <param name="txtNam">テキストファイル名</param>
+            <returns>ＮＣデータリスト</returns>
+        </member>
+        <member name="T:NCSEND2.NCINFO.NcInfoCam.MessageData">
+            <summary>
+            NcInfoCAMのワーニングメッセージを保管する
+            </summary>
+        </member>
+        <member name="P:NCSEND2.NCINFO.NcInfoCam.FullNameCam">
+            <summary>ファイルフルパス名</summary>
+        </member>
+        <member name="P:NCSEND2.NCINFO.NcInfoCam.LastWriteTime">
+            <summary>最終更新日（==xmlD.LMIDI,==xmlD.camOutputDateTime）</summary>
+        </member>
+        <member name="P:NCSEND2.NCINFO.NcInfoCam.FSize">
+            <summary>ＮＣデータのファイルサイズ</summary>
+        </member>
+        <member name="P:NCSEND2.NCINFO.NcInfoCam.ToolCount">
+            <summary>工具交換回数（注意：ＸＭＬの工具数でＵＮＩＸにて事前分割されたものは含まない）（==xml.ToolCount）</summary>
+        </member>
+        <member name="F:NCSEND2.NCINFO.NcInfoCam.fulfName">
+            <summary>以前出力したデータがある場合、そのデータのフルネーム(NC or XML)</summary>
+        </member>
+        <member name="P:NCSEND2.NCINFO.NcInfoCam.OutName">
+            <summary>出力名（作成されるＮＣデータの名前）</summary>
+        </member>
+        <member name="P:NCSEND2.NCINFO.NcInfoCam.SMOD0">
+            <summary>状態（工具分割無し）</summary>
+        </member>
+        <member name="P:NCSEND2.NCINFO.NcInfoCam.ERRM0">
+            <summary>エラーメッセージ（工具分割無し）</summary>
+        </member>
+        <member name="T:NCSEND2.NCINFO.NcInfoCam.LvmMess">
+            <summary>データの状態</summary>
+        </member>
+        <member name="F:NCSEND2.NCINFO.NcInfoCam.NcdtInfo">
+            <summary>
+            加工情報のＮＣデータ内の条件（ＤＢ条件とは一致しない。ＤＢに合わせるため変換する）
+            出力するＸＭＬとは異なる cf. xmlDoc(xmlD)
+            </summary>
+        </member>
+        <member name="T:NCSEND2.NCINFO.NcInfoCam.SFCInfo">
+            <summary>
+            ＮＣデータ内の加工条件
+            </summary>
+        </member>
+        <member name="M:NCSEND2.NCINFO.NcInfoCam.SFCInfo.#ctor(System.Double,System.Double,System.String)">
+            <summary>
+            ＮＣデータ内の加工条件
+            </summary>
+            <param name="spin">回転数</param>
+            <param name="feed">送り速度</param>
+            <param name="cool">クーラント</param>
+        </member>
+        <member name="F:NCSEND2.NCINFO.NcInfoCam.sqlDB">
+            <summary>
+            ＳＱＬＤＢ標準条件 AddXmlNode内で追加する
+            </summary>
+        </member>
+        <member name="F:NCSEND2.NCINFO.NcInfoCam.strLengthErr">
+            <summary>文字数エラーの設定</summary>
+        </member>
+        <member name="F:NCSEND2.NCINFO.NcInfoCam.ncKydList">
+            <summary>工程間での工具分割前のリスト。ＮＣデータと一致する in 2019/08/05</summary>
+        </member>
+        <member name="M:NCSEND2.NCINFO.NcInfoCam.#ctor(CamUtil.CamSystem,NCSEND2.KYDATA.KyData,System.Collections.Generic.List{NCSEND2.NCINFO.NcInfoCam.MessageData},CamUtil.StringLengthDB)">
+            <summary>
+            コンストラクタ（唯一）
+            </summary>
+            <param name="camSystem"></param>
+            <param name="stdt"></param>
+            <param name="pMessData"></param>
+            <param name="p_strLengthErr"></param>
+        </member>
+        <member name="M:NCSEND2.NCINFO.NcInfoCam.AddXmlNode_ToolSet(NCSEND2.KYDATA.KyData,NCSEND2.NCINFO.TSetCAM,System.Boolean)">
+            <summary>
+            １工具のＸＭＬノードを追加
+            </summary>
+            <param name="kyd2"></param>
+            <param name="tset"></param>
+            <param name="buhin"></param>
+        </member>
+        <member name="M:NCSEND2.NCINFO.NcInfoCam.SetElse">
+            <summary>
+            共通のその他の情報のセット
+            </summary>
+        </member>
+        <member name="M:NCSEND2.NCINFO.NcInfoCam.CheckOutName">
+            <summary>
+            出力名の設定とモードの設定
+            </summary>
+        </member>
+        <member name="P:NCSEND2.NCINFO.NcInfoCam.Dim">
+            <summary>ＣＡＭの次元。"2" OR "3"</summary>
+        </member>
+        <member name="F:NCSEND2.NCINFO.NcInfoCam.ToolCountTemp">
+            <summary>ＮＣデータ内の工具本数（ＸＭＬ作成時に使用する）</summary>
+        </member>
+        <member name="M:NCSEND2.NCINFO.NcInfoCam.AddXmlNode_NcInfo(NCSEND2.KYDATA.KyData)">
+            <summary>
+            ＸＭＬデータの設定（NcData）
+            </summary>
+            <param name="kyd2"></param>
+        </member>
+        <member name="T:NCSEND2.NCINFO.NcInfoCam.ToolD">
+            <summary>
+            ＸＭＬに保存する工具の情報
+            </summary>
+        </member>
+        <member name="M:NCSEND2.NCINFO.NcInfoCam.ToolD.#ctor(NCSEND2.KYDATA.KyData,NCSEND2.NCINFO.TSetCAM)">
+            <summary>
+            唯一のコンストラクタ
+            </summary>
+            <param name="kyd2"></param>
+            <param name="tset"></param>
+        </member>
+        <member name="T:NCSEND2.NCINFO.NcInfoCam.Kotei">
+            <summary>
+            ＸＭＬに保存する工程の情報
+            </summary>
+        </member>
+        <member name="T:NCSEND2.NCINFO.NcInfoCam.Kotei.FeedElse">
+            <summary></summary>
+        </member>
+        <member name="T:NCSEND2.NCINFO.NcInfoCam.Axis">
+            <summary>
+            ＸＭＬに保存する工具軸の情報
+            </summary>
+        </member>
+        <member name="T:NCSEND2.NCINFO.TSetCAM">
+            <summary>
+            ツールセットＣＡＭ情報[不変]
+            </summary>
+        </member>
+        <member name="P:NCSEND2.NCINFO.TSetCAM.Spin">
+            <summary>データベースで設定された回転数</summary>
+        </member>
+        <member name="P:NCSEND2.NCINFO.TSetCAM.Feedrate">
+            <summary>データベースで設定された送り速度</summary>
+        </member>
+        <member name="P:NCSEND2.NCINFO.TSetCAM.Feedrate2">
+            <summary>データベースで設定された送り速度２</summary>
+        </member>
+        <member name="P:NCSEND2.NCINFO.TSetCAM.Tnam_kinf">
+            <summary>ツールセットＣＡＭに関連付けられたユニックスの加工情報ファイル登録工具名</summary>
+        </member>
+        <member name="F:NCSEND2.NCINFO.TSetCAM.toolsetTemp">
+            <summary>ツールセットＣＡＭに関連付けられた仮ツールセットの工具情報</summary>
+        </member>
+        <member name="T:NCSEND2.Output.NcOutput">
+            <summary>
+            ＮＣデータ、ＮＣデータの情報（XML）、ユニックス用の情報を出力し、所定のフォルダーに保存する
+            ＣＡＭシステムごとに派生クラスを設ける
+            </summary>
+            <summary>
+            ＮＣデータの前処理をＣＡＭシステムごとに実施する
+            </summary>
+        </member>
+        <member name="F:NCSEND2.Output.NcOutput.ABC_G">
+            <summary>Ｇ以外のアルファベット大文字の配列</summary>
+        </member>
+        <member name="F:NCSEND2.Output.NcOutput.decimalNum">
+            <summary>小数点以下の桁数</summary>
+        </member>
+        <member name="M:NCSEND2.Output.NcOutput.Factory(CamUtil.CamSystem,NCSEND2.NCINFO.NcInfoCam,System.Windows.Forms.TextBox)">
+            <summary>
+            各ＣＡＭシステムから出力されたＮＣデータを共通フォーマットに変換するNcOutput クラスを作成する
+            </summary>
+            <param name="camSystem">ＣＡＭシステム情報</param>
+            <param name="ncd">ＮＣデータ１ファイルの情報</param>
+            <param name="kataZ">クリアランス面の値（CADmeisterKDK でのみ使用）</param>
+            <returns>NcOutput クラス</returns>
+        </member>
+        <member name="F:NCSEND2.Output.NcOutput.bname">
+            <summary>ベースＮＣフォーマット</summary>
+        </member>
+        <member name="F:NCSEND2.Output.NcOutput.post">
+            <summary>ＣＡＭのポスト仕様</summary>
+        </member>
+        <member name="F:NCSEND2.Output.NcOutput.ncd">
+            <summary>ＮＣデータ情報</summary>
+        </member>
+        <member name="F:NCSEND2.Output.NcOutput.sosin">
+            <summary>送信の可否</summary>
+        </member>
+        <member name="F:NCSEND2.Output.NcOutput.sendToUnix">
+            <summary>ユニックスへの送信</summary>
+        </member>
+        <member name="F:NCSEND2.Output.NcOutput.xmlUpdate">
+            <summary>
+            ３次元加工でもＸＭＬの更新を実行する。
+            参考：NonFeedLen==0 &amp;&amp; NonFeedTime==0 &amp;&amp; CuttingTime==null の場合、エアーカット比は出力されない。
+            </summary>
+        </member>
+        <member name="F:NCSEND2.Output.NcOutput.ncQue">
+            <summary>入力ＮＣデータの情報を保存するキュー</summary>
+        </member>
+        <member name="F:NCSEND2.Output.NcOutput.aprzd">
+            <summary>アプローチＺの工具単位リスト</summary>
+        </member>
+        <member name="F:NCSEND2.Output.NcOutput.ncCodeLast">
+            <summary>最後にストリームから読み出した行から作成したNcCode</summary>
+        </member>
+        <member name="F:NCSEND2.Output.NcOutput.kataZ">
+            <summary>突出し量の設定に利用する金型上面の高さ</summary>
+        </member>
+        <member name="M:NCSEND2.Output.NcOutput.#ctor(NCSEND2.Output.NcOutput.NcReader,NCSEND2.NCINFO.NcInfoCam)">
+            <summary>コンストラクタ</summary>
+            <param name="p_sr">前処理とともにＮＣデータを読む</param>
+            <param name="p_ncd">出力するＮＣデータの情報</param>
+        </member>
+        <member name="M:NCSEND2.Output.NcOutput.JokenSet(System.Boolean,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+            加工機共通の条件設定
+            </summary>
+            <param name="steel"></param>
+            <param name="sosin">データをＰＴＰに取込む場合 true</param>
+            <param name="sendToUnix">データをユニックスに送信する場合 true</param>
+            <param name="xmlUpdate">ＸＭＬを２次元加工以外でも更新する場合</param>
+        </member>
+        <member name="M:NCSEND2.Output.NcOutput.FtpPut(System.Windows.Forms.Label)">
+            <summary>
+            １ＮＣデータファイルの情報を出力します
+            </summary>
+            <param name="disp_message">実行時に表示するメッセージ Application.DoEvents(); で更新する</param>
+        </member>
+        <member name="M:NCSEND2.Output.NcOutput.NcConvertN(System.Int32,System.IO.StreamWriter,System.Double)">
+            <summary>
+            ＮＣデータ１工具分をReadNcd()を用いて読込み、修正を加えてストリームtfooに出力する。ＣＡＭシステム毎にオーバーライドされる。
+            </summary>
+            <param name="tcnt">工具順の数</param>
+            <param name="tfoo">ＮＣデータの出力先</param>
+            <param name="aprzd">加工原点Ｚ</param>
+            <returns>パスの移動距離</returns>
+        </member>
+        <member name="T:NCSEND2.Output.NcOutput.NcReader">
+            <summary>
+            ＮＣデータが不完全な部分を補完しNcLineCodeで理解できるようにフォーマットを整える
+            </summary>
+        </member>
+        <member name="F:NCSEND2.Output.NcOutput.NcReader.wnc">
+            <summary>ＮＣデータ読込み状況（0:初期値, 1:有意データ）</summary>
+        </member>
+        <member name="T:NCSEND2.Output.NcOutput.NcReader_Default">
+            <summary>
+            ＮＣデータが不完全な部分を補完しNcLineCodeで理解できるようにフォーマットを整える
+            </summary>
+        </member>
+        <member name="M:NCSEND2.Output.NcOutput.NcReader_Default.ReadLine">
+            <summary>
+            ＮＣデータの読込み。NcLineCodeで理解できるようにフォーマットを整える
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:NCSEND2.Output.NcOutput.NcReader_WorkNC">
+            <summary>
+            ＮＣデータが不完全な部分を補完しNcLineCodeで理解できるようにフォーマットを整える
+            </summary>
+        </member>
+        <member name="M:NCSEND2.Output.NcOutput.NcReader_WorkNC.ReadLine">
+            <summary>
+            ＮＣデータの読込み。NcLineCodeで理解できるようにフォーマットを整える
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:NCSEND2.Output.NcOutput.NcReader_CADmeisterKDK">
+            <summary>
+            ＮＣデータが不完全な部分を補完しNcLineCodeで理解できるようにフォーマットを整える
+            </summary>
+        </member>
+        <member name="M:NCSEND2.Output.NcOutput.NcReader_CADmeisterKDK.ReadLine">
+            <summary>
+            ＮＣデータの読込み。NcLineCodeで理解できるようにフォーマットを整える
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:NCSEND2.Output.NcOutput.NcReader_Buhin">
+            <summary>
+            部品加工の前処理。ＮＣデータの工程間の切れ目で工具交換コードを挿入する
+            </summary>
+        </member>
+        <member name="F:NCSEND2.Output.NcOutput.NcReader_Buhin.kydTool">
+            <summary>ＮＣデータ情報</summary>
+        </member>
+        <member name="F:NCSEND2.Output.NcOutput.NcReader_Buhin.ncQue">
+            <summary>出力するために保存されたＮＣデータ</summary>
+        </member>
+        <member name="F:NCSEND2.Output.NcOutput.NcReader_Buhin.tCount">
+            <summary>工具連番０から</summary>
+        </member>
+        <member name="F:NCSEND2.Output.NcOutput.NcReader_Buhin.kCount">
+            <summary>工程連番０から</summary>
+        </member>
+        <member name="F:NCSEND2.Output.NcOutput.NcReader_Buhin.lCount">
+            <summary>G100基準の行番号０から</summary>
+        </member>
+        <member name="F:NCSEND2.Output.NcOutput.NcReader_Buhin.g100">
+            <summary>G100から３行のＮＣデータ</summary>
+        </member>
+        <member name="M:NCSEND2.Output.NcOutput.NcReader_Buhin.ReadLine">
+            <summary>
+            ＮＣデータの読込み。NcLineCodeで理解できるようにフォーマットを整える
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:NCSEND2.Output.NcOutput_CADCEUS.NcConvertN(System.Int32,System.IO.StreamWriter,System.Double)">
+            <summary>
+            ＮＣデータ１工具分の出力
+            </summary>
+            <param name="tcnt">工具順の数</param>
+            <param name="tfoo">ＮＣデータの出力先</param>
+            <param name="aprzd">加工原点Ｚ</param>
+            <returns>パスの移動距離</returns>
+        </member>
+        <member name="M:NCSEND2.Output.NcOutput_CADmeisterK.NcConvertN(System.Int32,System.IO.StreamWriter,System.Double)">
+            <summary>
+            ＮＣデータ１工具分の出力
+            </summary>
+            <param name="tcnt">工具順の数</param>
+            <param name="tfoo">ＮＣデータの出力先</param>
+            <param name="aprzd">加工原点Ｚ</param>
+            <returns>パスの移動距離</returns>
+        </member>
+        <member name="M:NCSEND2.Output.NcOutput_CAMTOOL.NcConvertN(System.Int32,System.IO.StreamWriter,System.Double)">
+            <summary>
+            ＮＣデータ１工具分の出力
+            </summary>
+            <param name="tcnt">工具順の数</param>
+            <param name="tfoo">ＮＣデータの出力先</param>
+            <param name="aprzd">加工原点Ｚ</param>
+            <returns>パスの移動距離</returns>
+        </member>
+        <member name="M:NCSEND2.Output.NcOutput_CAMTOOL_5AXIS.NcConvertN(System.Int32,System.IO.StreamWriter,System.Double)">
+            <summary>
+            ＮＣデータ１工具分の出力
+            </summary>
+            <param name="tcnt">工具順の数</param>
+            <param name="tfoo">ＮＣデータの出力先</param>
+            <param name="aprzd">加工原点Ｚ</param>
+            <returns>パスの移動距離</returns>
+        </member>
+        <member name="M:NCSEND2.Output.NcOutput_Dynavista2D.NcConvertN(System.Int32,System.IO.StreamWriter,System.Double)">
+            <summary>
+            ＮＣデータ１工具分の出力
+            </summary>
+            <param name="tcnt">工具順の数</param>
+            <param name="tfoo">ＮＣデータの出力先</param>
+            <param name="aprzd">加工原点Ｚ</param>
+            <returns>パスの移動距離</returns>
+        </member>
+        <member name="M:NCSEND2.Output.NcOutput_Tebis_OM.NcConvertN(System.Int32,System.IO.StreamWriter,System.Double)">
+            <summary>
+            ＮＣデータ１工具分の出力
+            </summary>
+            <param name="tcnt">工具順の数</param>
+            <param name="tfoo">ＮＣデータの出力先</param>
+            <param name="aprzd">加工原点Ｚ</param>
+            <returns>パスの移動距離</returns>
+        </member>
+        <member name="M:NCSEND2.Output.NcOutput_Tebis_BU.NcConvertN(System.Int32,System.IO.StreamWriter,System.Double)">
+            <summary>
+            ＮＣデータ１工具分の出力
+            </summary>
+            <param name="tcnt">工具順の数</param>
+            <param name="tfoo">ＮＣデータの出力先</param>
+            <param name="aprzd">加工原点Ｚ</param>
+            <returns>パスの移動距離</returns>
+        </member>
+        <member name="M:NCSEND2.Output.NcOutput_Tebis_BU.ToolNameCheck(CamUtil.LCode.NcLineCode,System.Int32)">
+            <summary>
+            工具名称でポスト設定される値のチェック
+            </summary>
+            <param name="txtd"></param>
+            <param name="tcnt"></param>
+        </member>
+        <member name="M:NCSEND2.Output.NcOutput_WorkNC.NcConvertN(System.Int32,System.IO.StreamWriter,System.Double)">
+            <summary>
+            ＮＣデータ１工具分の出力
+            </summary>
+            <param name="tcnt">工具順の数</param>
+            <param name="tfoo">ＮＣデータの出力先</param>
+            <param name="aprzd">加工原点Ｚ</param>
+            <returns>パスの移動距離</returns>
+        </member>
+        <member name="M:NCSEND2.Output.NcOutput_WorkNC_5AXIS.NcConvertN(System.Int32,System.IO.StreamWriter,System.Double)">
+            <summary>
+            ＮＣデータ１工具分の出力
+            </summary>
+            <param name="tcnt">工具順の数</param>
+            <param name="tfoo">ＮＣデータの出力先</param>
+            <param name="aprzd">加工原点Ｚ</param>
+            <returns>パスの移動距離</returns>
+        </member>
+        <member name="M:NCSEND2.Program.Main">
+            <summary>
+            アプリケーションのメイン エントリ ポイントです。
+            </summary>
+            
+        </member>
+        <member name="T:NCSEND2.Properties.Resources">
+            <summary>
+              ローカライズされた文字列などを検索するための、厳密に型指定されたリソース クラスです。
+            </summary>
+        </member>
+        <member name="P:NCSEND2.Properties.Resources.ResourceManager">
+            <summary>
+              このクラスで使用されているキャッシュされた ResourceManager インスタンスを返します。
+            </summary>
+        </member>
+        <member name="P:NCSEND2.Properties.Resources.Culture">
+            <summary>
+              すべてについて、現在のスレッドの CurrentUICulture プロパティをオーバーライドします
+              現在のスレッドの CurrentUICulture プロパティをオーバーライドします。
+            </summary>
+        </member>
+        <member name="P:NCSEND2.Properties.Resources.BOOK02">
+            <summary>
+              (アイコン) に類似した型 System.Drawing.Icon のローカライズされたリソースを検索します。
+            </summary>
+        </member>
+        <member name="P:NCSEND2.Properties.Resources.book2">
+            <summary>
+              型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
+            </summary>
+        </member>
+        <member name="P:NCSEND2.Properties.Resources.checkmark">
+            <summary>
+              型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
+            </summary>
+        </member>
+        <member name="P:NCSEND2.Properties.Resources.CHECKMRK">
+            <summary>
+              (アイコン) に類似した型 System.Drawing.Icon のローカライズされたリソースを検索します。
+            </summary>
+        </member>
+        <member name="P:NCSEND2.Properties.Resources.edit">
+            <summary>
+              型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
+            </summary>
+        </member>
+        <member name="P:NCSEND2.Properties.Resources.EDIT1">
+            <summary>
+              (アイコン) に類似した型 System.Drawing.Icon のローカライズされたリソースを検索します。
+            </summary>
+        </member>
+        <member name="P:NCSEND2.Properties.Resources.litening">
+            <summary>
+              型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
+            </summary>
+        </member>
+        <member name="P:NCSEND2.Properties.Resources.LITENING1">
+            <summary>
+              (アイコン) に類似した型 System.Drawing.Icon のローカライズされたリソースを検索します。
+            </summary>
+        </member>
+        <member name="P:NCSEND2.Properties.Resources.refresh">
+            <summary>
+              型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
+            </summary>
+        </member>
+        <member name="P:NCSEND2.Properties.Resources.REFRESH1">
+            <summary>
+              (アイコン) に類似した型 System.Drawing.Icon のローカライズされたリソースを検索します。
+            </summary>
+        </member>
+        <member name="P:NCSEND2.Properties.Resources.table">
+            <summary>
+              型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
+            </summary>
+        </member>
+        <member name="P:NCSEND2.Properties.Resources.TABLE1">
+            <summary>
+              (アイコン) に類似した型 System.Drawing.Icon のローカライズされたリソースを検索します。
+            </summary>
+        </member>
+        <member name="P:NCSEND2.Properties.Resources.工程パラ_2_5D">
+            <summary>
+              型 System.Byte[] のローカライズされたリソースを検索します。
+            </summary>
+        </member>
+        <member name="P:NCSEND2.Properties.Resources.金型">
+            <summary>
+              型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
+            </summary>
+        </member>
+    </members>
+</doc>

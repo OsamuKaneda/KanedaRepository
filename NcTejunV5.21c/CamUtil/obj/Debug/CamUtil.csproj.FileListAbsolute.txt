@@ -1,0 +1,11 @@
+C:\Users\SS1155\Desktop\NcTejunV5.21c\CamUtil\bin\Debug\CamUtil.xml
+C:\Users\SS1155\Desktop\NcTejunV5.21c\CamUtil\bin\Debug\CamUtil.dll
+C:\Users\SS1155\Desktop\NcTejunV5.21c\CamUtil\bin\Debug\CamUtil.pdb
+C:\Users\SS1155\Desktop\NcTejunV5.21c\CamUtil\obj\Debug\CamUtil.csprojAssemblyReference.cache
+C:\Users\SS1155\Desktop\NcTejunV5.21c\CamUtil\obj\Debug\CamUtil.FormCommonDialog.resources
+C:\Users\SS1155\Desktop\NcTejunV5.21c\CamUtil\obj\Debug\CamUtil.FormInputBox.resources
+C:\Users\SS1155\Desktop\NcTejunV5.21c\CamUtil\obj\Debug\CamUtil.FormMessageBox.resources
+C:\Users\SS1155\Desktop\NcTejunV5.21c\CamUtil\obj\Debug\CamUtil.csproj.GenerateResource.cache
+C:\Users\SS1155\Desktop\NcTejunV5.21c\CamUtil\obj\Debug\CamUtil.csproj.CoreCompileInputs.cache
+C:\Users\SS1155\Desktop\NcTejunV5.21c\CamUtil\obj\Debug\CamUtil.dll
+C:\Users\SS1155\Desktop\NcTejunV5.21c\CamUtil\obj\Debug\CamUtil.pdb

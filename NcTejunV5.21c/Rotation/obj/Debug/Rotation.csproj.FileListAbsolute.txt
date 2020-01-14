@@ -1,0 +1,14 @@
+C:\Users\SS1155\Desktop\NcTejunV5.21c\Rotation\bin\Debug\Rotation.exe.config
+C:\Users\SS1155\Desktop\NcTejunV5.21c\Rotation\bin\Debug\Rotation.xml
+C:\Users\SS1155\Desktop\NcTejunV5.21c\Rotation\bin\Debug\Rotation.exe
+C:\Users\SS1155\Desktop\NcTejunV5.21c\Rotation\bin\Debug\Rotation.pdb
+C:\Users\SS1155\Desktop\NcTejunV5.21c\Rotation\bin\Debug\CamUtil.dll
+C:\Users\SS1155\Desktop\NcTejunV5.21c\Rotation\bin\Debug\CamUtil.pdb
+C:\Users\SS1155\Desktop\NcTejunV5.21c\Rotation\bin\Debug\CamUtil.xml
+C:\Users\SS1155\Desktop\NcTejunV5.21c\Rotation\obj\Debug\RotationAngle.Form_Matrix.resources
+C:\Users\SS1155\Desktop\NcTejunV5.21c\Rotation\obj\Debug\Rotation.Properties.Resources.resources
+C:\Users\SS1155\Desktop\NcTejunV5.21c\Rotation\obj\Debug\Rotation.csproj.GenerateResource.cache
+C:\Users\SS1155\Desktop\NcTejunV5.21c\Rotation\obj\Debug\Rotation.csproj.CoreCompileInputs.cache
+C:\Users\SS1155\Desktop\NcTejunV5.21c\Rotation\obj\Debug\Rotation.csproj.CopyComplete
+C:\Users\SS1155\Desktop\NcTejunV5.21c\Rotation\obj\Debug\Rotation.exe
+C:\Users\SS1155\Desktop\NcTejunV5.21c\Rotation\obj\Debug\Rotation.pdb

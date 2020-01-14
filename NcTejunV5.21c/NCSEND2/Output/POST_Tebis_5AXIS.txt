@@ -1,0 +1,1622 @@
+P:1:TOYODA GOSEI 5AXIS
+* 2005/01/26	N.Noguchi MSOL
+* 2007/09/26	N.Noguchi MSOL	穴加工、ELEM移動の際、位置決め動作を修正。
+* 2008/06/25	N.Noguchi MJS	CSV出力。センタードリル時、径はピン径を出力。
+* 2009.05.21	N.Noguchi MJS	「Thread mill」ミルに対応。
+* 2009.05.21	N.Noguchi MJS	「TS600SH」工具使用の場合、早送り部分をF100で出力。
+* 2009.05.28	N.Noguchi MJS	円弧補間直後のモーダル処理を修正。PP_35、PP_36、PP_37に代入追加。
+* 2010/06/02	N.Noguchi MSYS	V3.4対応。PP_AとPP_Cへの初期値代入を削除。
+* 2012/03/22	N.Noguchi MSYS	Thread Mill 対応。工具変数「Q」から「V」へ、工具径補正出力無し。
+
+* tgm.msn と併用して使用のこと。
+
+REM	ABSポスト。
+REM	Post-Parameterを利用したTool change と Block change可能。
+REM	
+REM	%
+REM	M90			APC（パレット搬入）
+REM	G65P8730X_Y_Z_		プログラム原点位置を機械座標で指示
+REM	G100T_H_E_I_S_		
+REM	G65P8700A_B_		加工方向設定
+REM	
+REM	
+REM	
+REM	
+REM	
+REM	M98P9306
+REM	
+REM	
+REM	
+REM	G65P8750I_J_K_I_J_K_・	IJKIJK・・・部品名をアスキーコードで指定
+REM	G65P8755X_Y_Z_I_J_J_R_	XYZ→測定ポイント、IJK測定面法線ベクトル、
+REM	G65P8755X_Y_Z_I_J_J_R_	R→測定範囲
+REM	・・・
+REM	G65P8759
+REM	M30	
+REM	%
+REM
+REM	注1：G100マクロ
+REM	T→工具番号
+REM	H→次工具の工具番号
+REM	I→工具長測定時のシフト量
+REM	S→回転数
+REM	他→工具径（コードは下記）
+REM
+REM	A: ガンドリル
+REM	B: ボールエンドミル
+REM	D: ドリル
+REM	E: エンドミル
+REM	Q: タップ
+REM	R: リーマ
+REM	V: ボーリング
+REM	J: ？？
+REM
+
+REM --- OPEN FILE -----------------------------------------
+
+999
+
+     PP_46=INSTR(1,PP_FILE$,"\")		REM --- フォルダーNC名の有無を判別
+     PP_47=LEN(PP_FILE$)-PP_46
+     PP_FILE$=MID$(PP_FILE$,PP_46+1,PP_47)
+
+     IF PP_46>0 THEN
+       GOTO 999
+     ENDIF
+
+     IF PP_BYTE_MAX>0 OR PP_BLK_LEN>0 THEN
+      OPEN PP_FILE$+"01.ncd":PP_BLK=1
+     ELSE
+      OPEN PP_FILE$+".ncd"
+     ENDIF
+
+REM --- INITIALIZATION ------------------------------------
+
+     PP_TOOLP_ID=1
+     PP_1=0
+********************** add fujimoto 2005/10/20 **************************************
+     PP_2=0.0
+     PP_3=0.0
+     PP_4=0.0
+     PP_5=0.0
+     PP_7=0.0
+     PP_8=0.0
+     PP_10=0.0
+     PP_11=0.0
+     PP_12=0.0
+********************** add end ******************************************************
+********************** add fujimoto 2005/05/12 **************************************
+     PP_6=0
+********************** add fujimoto 2005/05/12 **************************************
+     PP_N=-1
+     PP_COMPR=1
+     PP_6$ = "F80000"
+     PP_9 = 1
+     PP_28= 0			REM	lastZ
+     PP_29=1234.567		REM	加工開始Z
+     PP_30 = 0 
+     PP_31 = 0
+     PP_32=0	REM	Last S Value
+     PP_33 = 0
+     PP_34 = 0
+     PP_35 = 1234.567
+     PP_36 = 1234.567
+     PP_37 = 1234.567
+     PP_38 = 1
+     PP_39 = 0
+REM  PP_40 = 0
+     PP_41 = 0
+     PP_42 = 0
+     PP_43 = 0
+********************** add fujimoto 2005/05/12 **************************************
+     PP_44 = 0
+********************** add fujimoto 2005/05/12 **************************************
+     PP_46 = 0
+     PP_47 = 0
+     PP_48 = 0
+REM  PP_A = 12345
+REM  PP_C = 12345
+
+     SET_ORDER("GXYZACF")
+     SET_SIGN("","X","Y","Z"," *"," C","G","F","","")
+     SET_SIGN_X ("M","S","G","G04 P","I","J","K","","P","","")
+     SET_FORMAT("C",0,3,0,0,1)
+     SET_FORMAT("N",0,0,0,0,0)
+     SET_FORMAT("G",2,0,0,2,0)
+     SET_FORMAT("F",0,0,0,0,0)
+     SET_LABEL("W",2000)
+     SET_LABEL("B",3000)
+REM  PP_FORMAT=1	REM --- 1.0 ---
+REM  PP_FORMAT=2	REM --- 0.01 ---
+     PP_FORMAT=3	REM --- 0.001 ---
+     PP_SPACE$=""
+
+SET_LABEL("N",7510)
+SET_LABEL("G",7050)
+SET_LABEL("ARCZ" ,7100)
+* Variables
+PP_SPINDLE_R$  ="M03"
+PP_SPIN_R_FL_1$="M13"
+*PP_SPIN_R_FL_2$=""
+PP_SPINDLE_L$  ="M04"
+PP_SPIN_L_FL_1$="M14"
+*PP_SPIN_L_FL_2$=""
+PP_SPINDLE_OFF$="M05"
+*PP_SPIN_FL_OFF$=""
+PP_FLUID_1$    ="M08"
+*PP_FLUID_2$    ="M07"
+PP_FLUID_2$    ="M12"
+PP_FLUID_OFF$  ="M09"
+*PP_RCORR_L$    ="G41"
+*PP_RCORR_R$    ="G42"
+PP_RCORR_L$    ="G42"
+PP_RCORR_R$    ="G41"
+PP_RCORR_OFF$  ="G40"
+PP_STOP$        ="M00"
+*PP_SYNC_ON$     =""
+*PP_SYNC_OFF$    =""
+
+*-----------------------------------------------------------------------
+*** Configuration Transformation
+SET_LABEL("TRAFON" ,6100)
+SET_LABEL("TRAFOFF",6900)
+*
+
+*** Konfiguration Arbeitsebenen
+PP_G17POS$="G17 Q1"
+*PP_G17NEG$="G17 Q-1"
+*PP_G18POS$="G18 Q1"
+*PP_G18NEG$="G18 Q-1"
+*PP_G19POS$="G19 Q1"
+*PP_G19NEG$="G19 Q-1"
+*
+*** 工具径補正 Cutter Compensation ***
+
+*** Configuration Arc-Output
+*SET_ARC("OFF"  ,"")
+*SET_ARC("ON"   ,"NGO#~X#~Y#~Z#~I#~J#~K")
+*SET_ARC("HELIX","NGO#X#Y#Z#~I#~J#~K")
+PP_ARC_R$="G02"
+PP_ARC_L$="G03"
+SET_LABEL("ARCZ" ,7100)
+*
+*** Configuration Helix-Output
+*SET_HELIX("OFF"  ,"")
+*SET_HELIX("HELIX","NG#X#Y#Z#~I#~J#~K|W")
+*PP_HELIX_R$="G22"
+*PP_HELIX_L$="G23"
+SET_LABEL("HELIX",7200)
+*
+*** Configuration Cycle-Output
+SET_LABEL("HOLE" ,8100)
+SET_LABEL("BREAK",8200)
+SET_LABEL("REMOV",8300)
+SET_LABEL("TAP"  ,8400)
+SET_LABEL("FIT"  ,8500)
+*
+
+REM --- HEADER --------------------------------------------
+*	--- header.txt is used as input file of home position
+
+************************************************************************
+REM --- CSV出力用にPP_20へ加工長を代入しておく
+	PP_20=NC_Fraeslaenge
+
+REM --- 理論加工時間変数の書式合わせ
+REM	PP_45=NC_Time/60
+REM	PP_1$=STR$(PP_45,7,4,0,2,1)
+REM	PP_2$=MID$(PP_1$,1,2)	REM --- PP_2$ holds HOURS ---
+REM	PP_3$="0."+MID$(PP_1$,4,4)
+REM	PP_45=VAL(PP_3$)*60
+REM	PP_3$=STR$(PP_45,5,2,0,2,1)
+REM	PP_4$=MID$(PP_3$,1,2)	REM --- PP_4$ holds MINUTES ---
+REM	PP_3$="0."+MID$(PP_3$,4,2)
+REM	PP_45=VAL(PP_3$)*60
+REM	PP_5$=STR$(PP_45,5,2,0,2,1)
+REM	PP_5$=MID$(PP_5$,1,2)	REM --- PP_5$ holds SECONDS ---
+************************************************************************
+       PRINTLN "%"
+
+REM     PRINTLN "O";PP_PRG$
+
+************************************************************************
+REM --- NCファイル名出力
+REM      PRINTLN  "(FILE: ";PP_FILE$+".NCD";")"
+
+************************************************************************
+
+	REM --- date + time of creation ---
+
+REM 	PRINTLN  "(SYSTEM DATE: ";TS_Datum$;")"
+REM 	PRINTLN  "(SYSTEM TIME: ";TS_Zeit$;")"
+
+REM --- COORDINATES ---------------------------------------
+
+1100
+	LOAD_TOOLP
+
+	PP_POINT_ID=1
+	PP_19=PP_FIRST_Z
+
+********************** delete fujimoto 2005/05/12 **************************************
+REM  IF PP_TOOL_MAG<>PP_6 THEN
+********************** delete fujimoto 2005/05/12 **************************************
+REM      GOSUB 2100
+REM      PP_6=PP_TOOL_MAG
+********************** delete fujimoto 2005/05/12 **************************************
+REM  ELSE
+********************** delete fujimoto 2005/05/12 **************************************
+REM      PRINTLN  "(P)"
+********************** delete fujimoto 2005/05/12 **************************************
+REM  ENDIF
+REM
+********************** delete fujimoto 2005/05/12 **************************************
+REM --- 1st block ---
+
+     LOAD_POINT
+
+********************** change fujimoto 2005/05/12 **************************************
+     IF PP_43 <> VAL(STR$(PP_A,0,3,0,0,0) )  THEN
+	PP_43 = VAL(STR$(PP_A,0,3,0,0,0) ) 
+********************** change fujimoto 2005/05/12 **************************************
+	PP_39 = 1
+     ENDIF
+
+********************** change fujimoto 2005/05/12 **************************************
+     IF PP_44 <> VAL(STR$(PP_C,0,3,0,0,0) )  THEN
+	PP_44 = VAL(STR$(PP_C,0,3,0,0,0) ) 
+********************** change fujimoto 2005/05/12 **************************************
+	PP_39 = 1
+     ENDIF
+
+REM  IF PP_TOOL_MAG<>PP_6 OR PP_39 = 1 THEN
+       GOSUB 2100
+REM       PP_6=PP_TOOL_MAG
+REM	  PP_39 = 0
+REM  ENDIF
+
+     PRINT  STDFORM$(PP_X,PP_1,"X")
+     PP_35 = PP_X
+
+     PRINTLN  STDFORM$(PP_Y,PP_1,"Y")
+     PP_36 = PP_Y
+****************** change by fujimoto 2005/06/28 ****************************
+	IF NC_Cooling = 5 THEN		REM Outside water
+		PRINTLN PP_FLUID_1$
+	ELSE
+	IF NC_Cooling = 2 THEN		REM Inside water
+		PRINTLN PP_FLUID_2$
+	ENDIF
+	ENDIF
+
+     PRINTLN  STDFORM$(PP_Z,PP_1,"Z")
+     PP_37 = PP_Z
+****************** change by fujimoto 2005/06/28 ****************************
+
+     PP_POINT_ID=PP_POINT_ID+1
+
+ IF NC_Function$="MPlan" OR NC_Function$="MCont" OR NC_Function$="MContR" THEN
+   GOSUB 7000
+ ELSE
+   IF NC_Function$="MBore" OR NC_Function$="MFeat" THEN
+     GOSUB 7000
+   ELSE
+     GOTO 1110
+   ENDIF
+ ENDIF
+
+
+1110	REM --- OUTPUT XYZ ---
+
+     LOAD_POINT
+********************** delete fujimoto 2005/05/12 **************************************
+REM
+REM  IF PP_43 <> VAL(STR$(PP_A,0,3,0,0,0) )  THEN
+REM	PP_43 = VAL(STR$(PP_A,0,3,0,0,0) ) 
+REM	PP_39 = 1
+REM  ENDIF
+REM
+REM  IF PP_44 <> VAL(STR$(PP_C,0,3,0,0,0) )  THEN
+REM	PP_44 = VAL(STR$(PP_C,0,3,0,0,0) ) 
+REM	PP_39 = 1
+REM  ENDIF
+********************** delete fujimoto 2005/05/12 **************************************
+
+     REM --- TC ---
+
+REM      PRINTLN  STDFORM$(PP_A,PP_A," A")
+REM      PRINTLN  STDFORM$(PP_C,PP_C," C")
+
+
+     IF NC_Drehzahl <> PP_32 THEN
+     	PP_32 = NC_Drehzahl
+REM	PRINTLN  "M05"
+REM	PRINTLN  "S";STR$(NC_Drehzahl,0,0,0,0,0);"M03"
+     ENDIF
+
+     IF PP_G <=1 THEN
+	IF PP_G =0 THEN
+		PP_G = 1
+		PRINT STDFORM$(PP_G,PP_G,"G")
+		PP_G = 0
+	ELSE
+		PRINT STDFORM$(PP_G,PP_G,"G")
+		IF PP_38 = 0 THEN
+		  PP_38 = PP_F		REM  first F value
+		ENDIF
+	ENDIF
+     ENDIF	
+
+     IF ABS(PP_X-PP_35) > 0.001 THEN
+	PRINT  STDFORM$(PP_X,PP_1,"X")
+	PP_35 = PP_X
+     ENDIF
+
+     IF ABS(PP_Y-PP_36) > 0.001 THEN
+	PRINT  STDFORM$(PP_Y,PP_1,"Y")
+	PP_36 = PP_Y
+     ENDIF
+
+     IF ABS(PP_Z-PP_37) > 0.001 THEN
+	PRINT  STDFORM$(PP_Z,PP_1,"Z")
+	PP_37 = PP_Z
+     ENDIF
+
+     IF PP_G >=1 THEN
+	PRINTLN STDFORM$(PP_F,PP_F,"F")
+     ELSE
+	PRINTLN PP_6$
+	PP_F = 80000
+     ENDIF
+
+     PP_28=PP_Z			REM	lastZ
+
+REM     IF NC_Maschine$<>"" THEN
+REM      PRINT  STDFORM$(PP_A,PP_A," *")
+REM      PRINTLN  STDFORM$(PP_C,PP_C," C")
+REM     ENDIF
+
+	IF PP_TOOL_TMAX > 0 AND PP_TOOL_TIME > PP_TOOL_TMAX AND (PP_G=0 OR PP_G=9) THEN
+		GOSUB 3000
+	ENDIF
+
+	IF (PP_G=0 OR PP_G=9) AND PP_BYTE_MAX > 0 AND PP_BYTE_NR > PP_BYTE_MAX THEN
+		GOSUB 3000
+	ENDIF
+
+	IF (PP_G=0 OR PP_G=9) AND PP_BLK_LEN > 0 AND PP_REC_NR > PP_BLK_LEN THEN
+		GOSUB 3000
+	ENDIF
+
+     PP_POINT_ID=PP_POINT_ID+1
+     
+     IF PP_POINT_ID<=PP_POINT_NR THEN
+	GOTO 1110
+     ENDIF
+
+    PP_TOOLP_ID=PP_TOOLP_ID+1
+    
+   IF PP_TOOLP_ID<=PP_TOOLP_NR THEN
+      GOTO 1100
+    ENDIF
+
+REM --- BOTTOM --------------------------------------------
+
+     REM --- load Bottom.txt ---
+
+     GOSUB 4100
+
+     REM --- tool start/end position ---
+
+REM     IF NC_Maschine$<>"" THEN
+REM       PRINT  "G00"
+REM       PRINT   STDFORM$(0,PP_1," *")
+REM       PRINT   STDFORM$(0,PP_1," C")
+REM	  PRINTLN
+REM     ENDIF
+
+     REM ---
+
+		PRINTLN "M09"
+     PRINTLN  "M98P9306"
+     PRINTLN  "M30"
+     PRINTLN  "%"
+
+REM --- CLOSE FILE ----------------------------------------
+     CLOSE
+
+     REM --- PROCCESS SHEET ---
+     GOTO 10000
+
+REM --- END -----------------------------------------------
+
+REM -------------------------------------------------------
+REM --- SUBROUTINES ---------------------------------------
+REM -------------------------------------------------------
+2000 REM --- TOOL CHANGE ----------------------------------
+
+	IF PP_T_VEC_X <> 0 OR PP_T_VEC_Y <> 0 OR PP_T_VEC_Z <> 0 THEN
+     PRINT   "G01"
+     PRINT   STDFORM$(PP_X+PP_T_VEC_X,PP_1,"X")
+     PRINT   STDFORM$(PP_Y+PP_T_VEC_Y,PP_1,"Y")
+     PRINT   STDFORM$(PP_Z+PP_T_VEC_Z,PP_1,"Z")
+     PRINTLN STDFORM$(PP_F,PP_F,"F")
+	ENDIF
+
+     PRINT   "G00"
+     PRINTLN STDFORM$(PP_T_RETR,PP_1,"Z")
+
+     PRINTLN "/M09"	REM --- spindle OFF ---
+     PRINTLN "/M05"	REM --- coolant OFF ---
+     PRINTLN "/M01"	REM --- optional stop ---
+
+     GOSUB 2100	REM --- call tooldata ---
+
+     PRINT   "G00"
+     PRINTLN STDFORM$(PP_T_RETR,PP_1,"Z")
+
+REM	IF NC_Maschine$<>"" THEN
+REM      PRINT  STDFORM$(PP_A,PP_A," *")
+REM      PRINTLN  STDFORM$(PP_C,PP_C," C")
+REM     ENDIF
+
+REM     PRINT   "G00"
+     PRINT   STDFORM$(PP_X+PP_T_VEC_X,PP_1,"X")
+     PRINTLN STDFORM$(PP_Y+PP_T_VEC_Y,PP_1,"Y")
+     PRINTLN STDFORM$(PP_Z+PP_T_VEC_Z,PP_1,"Z")
+
+	IF PP_T_VEC_X <> 0 OR PP_T_VEC_Y <> 0 OR PP_T_VEC_Z <> 0 THEN
+     PRINT   "G01"
+     PRINT   STDFORM$(PP_X,PP_1,"X")
+     PRINT   STDFORM$(PP_Y,PP_1,"Y")
+     PRINT   STDFORM$(PP_Z,PP_1,"Z")
+     PRINTLN STDFORM$(PP_F,PP_F,"F")
+	ENDIF
+     RETURN
+
+2100 REM --- TOOL -----------------------------------------
+
+     LOAD_TOOL
+
+     REM --- toolcomment ---
+     REM --- jobcomment ---
+     REM --- TC ---
+
+     GOSUB 5100
+
+     REM --- home position ---
+
+     RETURN
+
+3000 REM --- BLOCK CHANGE BOTTOM ---------------------------------
+
+     PRINT   "G00"
+     PRINTLN STDFORM$(PP_29,PP_1,"Z")  REM --- up to z_home ---
+     PRINTLN  "M30"
+     PRINTLN  "%"
+
+     CLOSE
+
+     PP_BLK=PP_BLK+1
+     PP_REC_NR=0
+     OPEN PP_FILE$+"-"+STR$(PP_BLK,2,0,0,2,0)+".ncd"
+     PP_N=-1
+     PP_9 = 1
+
+     PP_G = 99999
+     PP_F = 99999
+     PP_Z = PP_28
+
+     PRINTLN "%"
+
+REM     PRINTLN "O";PP_PRG$
+     PRINT  "(FILE: ";PP_FILE$+"-"+STR$(PP_BLK,2,0,0,2,0)+".ncd"
+
+     PP_F = PP_38
+     PP_38 = 1
+
+     GOSUB 2100
+
+REM --------------------------------------------------------
+     REM -- First record of split files
+
+     IF PP_G <> 0 THEN
+	PRINT  "G00";STDFORM$(PP_35,PP_1,"X")
+	PRINTLN  STDFORM$(PP_36,PP_1,"Y")
+	PRINTLN  "G00";STDFORM$(PP_37+20.0,PP_1,"Z")
+
+	PRINT "G01"
+	PRINT STDFORM$(PP_37,PP_1,"Z")
+	PRINTLN STDFORM$(PP_F,PP_F,"F")
+	PP_G = 1
+      ENDIF
+
+REM     IF NC_Maschine$<>"" THEN
+REM      PRINT   STDFORM$(PP_A,PP_1," *")
+REM      PRINTLN STDFORM$(PP_C,PP_1," C")
+REM     ENDIF
+
+REM     PRINT  "G01"
+REM     PRINTLN  STDFORM$(PP_Z,PP_1,"Z")
+REM     PRINTLN STDFORM$(PP_FIRST_F,PP_F,"F")
+
+REM	ENDIF
+
+     RETURN
+
+4100 REM --- HEADER ---------------------------------------
+     OPEN_INP "header.txt"
+4110 IF NOT EOF() THEN
+      PRINTLN INPUT$()
+      GOTO 4110
+     ENDIF
+     CLOSE_INP
+     RETURN
+
+4200 REM --- BOTTOM ---------------------------------------
+
+     OPEN_INP "bottom.txt"
+4210 IF NOT EOF() THEN
+      PRINTLN INPUT$()
+      GOTO 4210
+     ENDIF
+     CLOSE_INP
+     RETURN
+
+************************************************************************
+5000 REM --- jobcomment ---
+     REM --- output machining time ---
+     PRINT  "(MACHINING TIME: "
+     PRINT  PP_2$;":"
+     PRINT  PP_4$;":"
+     PRINT  PP_5$
+     PRINTLN  ")" 
+
+     PRINTLN  "(WALL THICKNESS=";STR$(NC_Wandstaerke,4,2,0,0,1);")"
+     PRINTLN  "(STOCK ALLOWANCE=";STR$(NC_Aufmass,4,2,0,0,1);")"
+     PRINTLN  "(STEP=";STR$(NC_Berechnungsstep,4,2,0,0,1);")"
+
+	LOAD_POINT
+
+	IF PP_A = 0 AND PP_C = 0 THEN
+		PRINTLN  "(A ANGLE= NONE)"
+		PRINTLN  "(C ANGLE= NONE)"
+	ELSE
+		PRINTLN  "(A ANGLE= ";STR$(PP_A,0,0,0,0,0);")"
+		PRINTLN  "(C ANGLE= ";STR$(PP_C,0,0,0,0,0);")"
+	ENDIF
+
+        RETURN
+
+5100 REM --- TC ---
+
+    IF PP_38=1 THEN
+	PP_38 = 0	REM 分割時の工具交換。3000セクションでPP_38=1
+    ELSE
+REM	PP_29 = 1234.567	REM 加工開始Zを再入力
+	PP_29 = PP_FIRST_Z
+
+REM     PRINT   "G00"
+REM     PRINTLN STDFORM$(PP_29,PP_1,"Z")  REM --- up to z_home ---
+REM     PRINTLN "X0Y0"
+
+      IF PP_6<>PP_TOOL_MAG THEN
+		PRINTLN "M09"
+		PRINTLN  "M98P9306"
+	ELSE
+		PRINTLN "M09"
+		PRINTLN "Z420000"
+		PRINTLN "M98P9017(G103)"
+      ENDIF
+
+    ENDIF
+
+  IF PP_6<>PP_TOOL_MAG THEN
+* Tool Comment
+GOSUB 3150
+PRINT "T";STR$(PP_TOOL_MAG,4,0,0,2,0);" ";WZ_Name$;": "
+PRINT WZ_Comment$;": "
+PRINT " D=";STR$(WZ_Durchmesser,0,2,0,0,0)
+PRINT " L=";STR$(WZ_TotalLen,0,2,0,0,0)
+IF WZ_Typ=9 THEN
+* PRINT " Gewinde: Typ=";STR$(WZ_ThreadType,0,0,0,0,0)
+ PRINT " Steigung=";STR$(WZ_Pitch,0,2,0,0,0)
+ELSE
+ PRINT " Winkel=";STR$(WZ_Spitzenwinkel,0,2,0,0,0)
+ENDIF
+IF WZ_RotDir=2 THEN PRINT "; left turning" ENDIF
+GOSUB 3155
+
+    PRINT  "G100"
+    PRINT  "T";STR$(PP_TOOL_MAG,2,0,0,2,0)
+ 
+	IF WZ_Typ=1 THEN		REM :Ball cutter
+		PRINT "B";STR$(WZ_Diameter,0,-3,0,0,1)
+	ELSE
+	IF WZ_Typ=2 THEN		REM :Flat cutter
+		IF MID$(WZ_Name$,1,1) = "E" THEN
+			PRINT "F";STR$(WZ_Diameter,0,-3,0,0,1)
+		ELSE
+			PRINT "E";STR$(WZ_Diameter,0,-3,0,0,1)
+		ENDIF
+	ELSE
+	IF WZ_Typ=5 THEN		REM :Pilot drill
+		PRINT "A";STR$(WZ_Diameter,0,-3,0,0,1)
+	ELSE
+	IF WZ_Typ=6 THEN		REM :Center drill
+		PRINT "D";STR$(WZ_Diameter,0,-3,0,0,1)
+	ELSE
+	IF WZ_Typ=7 THEN		REM :Spiral drill
+		PRINT "D";STR$(WZ_Diameter,0,-3,0,0,1)
+	ELSE
+	IF WZ_Typ=3 THEN		REM :Tapered mill(Chamfer tool)
+		PRINT "V";STR$(WZ_Diameter,0,-3,0,0,1)
+	ELSE
+	IF WZ_Typ=9 THEN		REM :Tap tool
+		PRINT "Q";STR$(WZ_Diameter,0,-3,0,0,1)
+	ELSE
+	IF WZ_Typ=10 THEN		REM :Reaming tool
+		PRINT "R";STR$(WZ_Diameter,0,-3,0,0,1)
+	ELSE
+	IF WZ_Typ=11 THEN		REM :Boring tool
+		PRINT "V";STR$(WZ_Diameter,0,-3,0,0,1)
+	ELSE
+	IF WZ_Typ=4 THEN		REM :Thread mill
+		PRINT "V";STR$(WZ_Diameter,0,-3,0,0,1)
+	ELSE
+		PRINT "J";STR$(WZ_Diameter,0,-3,0,0,1)
+	ENDIF
+	ENDIF
+	ENDIF
+	ENDIF
+	ENDIF
+	ENDIF
+	ENDIF
+	ENDIF
+	ENDIF
+	ENDIF
+	PRINT "C";STR$(WZ_Length,0,-3,0,0,1)
+****************** change by fujimoto 2005/06/16 ****************************
+****************** REM tsuika ****************************
+REM	IF MID$(PP_FILE$,1,3) = "ana" OR NC_ToolRef$ = "Tip" THEN
+REM		PRINT "K0."
+REM	ELSE
+		IF WZ_Type=1 THEN
+			PRINT "K";STR$(WZ_Diameter/2.0,0,-3,0,0,1)
+		ELSE
+			PRINT "K";STR$(WZ_CornerRad,0,-3,0,0,1)
+		ENDIF
+REM	ENDIF
+
+    PRINT  "S";STR$(NC_Speed,0,0,0,0,0)
+REM	IF MID$(PP_FILE$,1,3) = "ana" OR NC_ToolRef$ = "Tip" THEN
+	IF NC_ToolRef$ = "Tip" THEN
+		PRINT "M0"
+	ELSE
+		PRINT "M1"
+	ENDIF
+    PRINTLN  ""
+****************** change by fujimoto 2005/06/16 ****************************
+
+    PRINT "G65P9376"
+    PP_40 = LEN(WZ_Name$)
+    PP_41 = 1
+5101
+    PP_42 = 0
+    PP_8$=MID$(WZ_Name$,PP_41,1)
+    IF PP_8$ = "(" THEN PP_42 = 40.0:GOTO 5102 ENDIF
+    IF PP_8$ = ")" THEN PP_42 = 41.0:GOTO 5102 ENDIF
+    IF PP_8$ = "*" THEN PP_42 = 42.0:GOTO 5102 ENDIF
+    IF PP_8$ = "+" THEN PP_42 = 43.0:GOTO 5102 ENDIF
+    IF PP_8$ = "," THEN PP_42 = 44.0:GOTO 5102 ENDIF
+    IF PP_8$ = "-" THEN PP_42 = 45.0:GOTO 5102 ENDIF
+    IF PP_8$ = "." THEN PP_42 = 46.0:GOTO 5102 ENDIF
+    IF PP_8$ = "/" THEN PP_42 = 47.0:GOTO 5102 ENDIF
+    IF PP_8$ = "0" THEN PP_42 = 48.0:GOTO 5102 ENDIF
+    IF PP_8$ = "1" THEN PP_42 = 49.0:GOTO 5102 ENDIF
+    IF PP_8$ = "2" THEN PP_42 = 50.0:GOTO 5102 ENDIF
+    IF PP_8$ = "3" THEN PP_42 = 51.0:GOTO 5102 ENDIF
+    IF PP_8$ = "4" THEN PP_42 = 52.0:GOTO 5102 ENDIF
+    IF PP_8$ = "5" THEN PP_42 = 53.0:GOTO 5102 ENDIF
+    IF PP_8$ = "6" THEN PP_42 = 54.0:GOTO 5102 ENDIF
+    IF PP_8$ = "7" THEN PP_42 = 55.0:GOTO 5102 ENDIF
+    IF PP_8$ = "8" THEN PP_42 = 56.0:GOTO 5102 ENDIF
+    IF PP_8$ = "9" THEN PP_42 = 57.0:GOTO 5102 ENDIF
+    IF PP_8$ = "=" THEN PP_42 = 61.0:GOTO 5102 ENDIF
+    IF PP_8$ = "A" THEN PP_42 = 65.0:GOTO 5102 ENDIF
+    IF PP_8$ = "B" THEN PP_42 = 66.0:GOTO 5102 ENDIF
+    IF PP_8$ = "C" THEN PP_42 = 67.0:GOTO 5102 ENDIF
+    IF PP_8$ = "D" THEN PP_42 = 68.0:GOTO 5102 ENDIF
+    IF PP_8$ = "E" THEN PP_42 = 69.0:GOTO 5102 ENDIF
+    IF PP_8$ = "F" THEN PP_42 = 70.0:GOTO 5102 ENDIF
+    IF PP_8$ = "G" THEN PP_42 = 71.0:GOTO 5102 ENDIF
+    IF PP_8$ = "H" THEN PP_42 = 72.0:GOTO 5102 ENDIF
+    IF PP_8$ = "I" THEN PP_42 = 73.0:GOTO 5102 ENDIF
+    IF PP_8$ = "J" THEN PP_42 = 74.0:GOTO 5102 ENDIF
+    IF PP_8$ = "K" THEN PP_42 = 75.0:GOTO 5102 ENDIF
+    IF PP_8$ = "L" THEN PP_42 = 76.0:GOTO 5102 ENDIF
+    IF PP_8$ = "M" THEN PP_42 = 77.0:GOTO 5102 ENDIF
+    IF PP_8$ = "N" THEN PP_42 = 78.0:GOTO 5102 ENDIF
+    IF PP_8$ = "O" THEN PP_42 = 79.0:GOTO 5102 ENDIF
+    IF PP_8$ = "P" THEN PP_42 = 80.0:GOTO 5102 ENDIF
+    IF PP_8$ = "Q" THEN PP_42 = 81.0:GOTO 5102 ENDIF
+    IF PP_8$ = "R" THEN PP_42 = 82.0:GOTO 5102 ENDIF
+    IF PP_8$ = "S" THEN PP_42 = 83.0:GOTO 5102 ENDIF
+    IF PP_8$ = "T" THEN PP_42 = 84.0:GOTO 5102 ENDIF
+    IF PP_8$ = "U" THEN PP_42 = 85.0:GOTO 5102 ENDIF
+    IF PP_8$ = "V" THEN PP_42 = 86.0:GOTO 5102 ENDIF
+    IF PP_8$ = "W" THEN PP_42 = 87.0:GOTO 5102 ENDIF
+    IF PP_8$ = "X" THEN PP_42 = 88.0:GOTO 5102 ENDIF
+    IF PP_8$ = "Y" THEN PP_42 = 89.0:GOTO 5102 ENDIF
+    IF PP_8$ = "Z" THEN PP_42 = 90.0:GOTO 5102 ENDIF
+    IF PP_8$ = "_" THEN PP_42 = 95.0:GOTO 5102 ENDIF
+    IF PP_8$ = "a" THEN PP_42 = 97.0:GOTO 5102 ENDIF
+    IF PP_8$ = "b" THEN PP_42 = 98.0:GOTO 5102 ENDIF
+    IF PP_8$ = "c" THEN PP_42 = 99.0:GOTO 5102 ENDIF
+    IF PP_8$ = "d" THEN PP_42 = 100.0:GOTO 5102 ENDIF
+    IF PP_8$ = "e" THEN PP_42 = 101.0:GOTO 5102 ENDIF
+    IF PP_8$ = "f" THEN PP_42 = 102.0:GOTO 5102 ENDIF
+    IF PP_8$ = "g" THEN PP_42 = 103.0:GOTO 5102 ENDIF
+    IF PP_8$ = "h" THEN PP_42 = 104.0:GOTO 5102 ENDIF
+    IF PP_8$ = "i" THEN PP_42 = 105.0:GOTO 5102 ENDIF
+    IF PP_8$ = "j" THEN PP_42 = 106.0:GOTO 5102 ENDIF
+    IF PP_8$ = "k" THEN PP_42 = 107.0:GOTO 5102 ENDIF
+    IF PP_8$ = "l" THEN PP_42 = 108.0:GOTO 5102 ENDIF
+    IF PP_8$ = "m" THEN PP_42 = 109.0:GOTO 5102 ENDIF
+    IF PP_8$ = "n" THEN PP_42 = 110.0:GOTO 5102 ENDIF
+    IF PP_8$ = "o" THEN PP_42 = 111.0:GOTO 5102 ENDIF
+    IF PP_8$ = "p" THEN PP_42 = 112.0:GOTO 5102 ENDIF
+    IF PP_8$ = "q" THEN PP_42 = 113.0:GOTO 5102 ENDIF
+    IF PP_8$ = "r" THEN PP_42 = 114.0:GOTO 5102 ENDIF
+    IF PP_8$ = "s" THEN PP_42 = 115.0:GOTO 5102 ENDIF
+    IF PP_8$ = "t" THEN PP_42 = 116.0:GOTO 5102 ENDIF
+    IF PP_8$ = "u" THEN PP_42 = 117.0:GOTO 5102 ENDIF
+    IF PP_8$ = "v" THEN PP_42 = 118.0:GOTO 5102 ENDIF
+    IF PP_8$ = "w" THEN PP_42 = 119.0:GOTO 5102 ENDIF
+    IF PP_8$ = "x" THEN PP_42 = 120.0:GOTO 5102 ENDIF
+    IF PP_8$ = "y" THEN PP_42 = 121.0:GOTO 5102 ENDIF
+    IF PP_8$ = "z" THEN PP_42 = 122.0:GOTO 5102 ENDIF
+5102
+    IF PP_42 = 0 THEN
+      PP_42 = 40.0
+    ENDIF 
+    IF PP_41=1 OR PP_41=4 OR PP_41=7 OR PP_41=10 OR PP_41=13 OR PP_41=16 OR PP_41=19 THEN
+      PRINT "I"
+    ENDIF
+    IF PP_41=2 OR PP_41=5 OR PP_41=8 OR PP_41=11 OR PP_41=14 OR PP_41=17 OR PP_41=20 THEN
+      PRINT "J"
+    ENDIF
+    IF PP_41=3 OR PP_41=6 OR PP_41=9 OR PP_41=12 OR PP_41=15 OR PP_41=18 OR PP_41=21 THEN
+      PRINT "K"
+    ENDIF
+    PRINT STR$(PP_42,0,0,0,0,0);"."
+    IF PP_40 > PP_41 THEN
+      PP_41=PP_41+1
+      GOTO 5101
+    ENDIF
+    PRINT "(";WZ_Name$;")"
+    PRINTLN ""
+  ENDIF
+
+  IF PP_6<>PP_TOOL_MAG OR PP_39=1 THEN
+
+    PRINT  "G65P8700"
+    PRINT  "A";STR$(PP_A,0,-3,0,0,1)
+    IF STR$(PP_C,0,-3,0,0,1) = "360." THEN
+		PRINT  "B0."
+    ELSE
+		PRINT  "B";STR$(PP_C,0,-3,0,0,1)
+	ENDIF
+REM PRINT STDFORM$(PP_A,PP_1,"A")
+REM PRINT STDFORM$(PP_C,PP_1,"B")
+    PRINTLN  ""
+    PP_6=PP_TOOL_MAG
+    PP_39=0
+  ENDIF
+	IF WZ_Comment$="ARA" THEN
+		PRINTLN "G102A12."
+	ELSE
+	IF WZ_Comment$="ARB" THEN
+		PRINTLN "G102A11."
+	ELSE
+	IF WZ_Comment$="CHU" THEN
+		PRINTLN "G102A22."
+	ELSE
+	IF WZ_Comment$="SIA" THEN
+		PRINTLN "G102A21."
+	ELSE
+	IF WZ_Comment$="SIB" THEN
+		PRINTLN "G102A3.B22."
+	ELSE
+	IF WZ_Comment$="CON" THEN
+		PRINTLN "G102A21."
+	ENDIF
+	ENDIF
+	ENDIF
+	ENDIF
+	ENDIF
+	ENDIF
+
+REM --- Turn on transformation and define the X-direction with Vector.
+
+    TRAFO_ON
+    TRAFO_PLANEDIR
+
+    PP_33 = 1
+    PP_34 = 0
+    PP_30 = PP_33*COS(PP_C)-PP_34*SIN(PP_C)
+    PP_31 = PP_33*SIN(PP_C)+PP_34*COS(PP_C)
+    TRAFO_SET_XDIR(PP_30,PP_31,0)
+    TRAFO_SET_XDIR(PP_30,PP_31,0)
+
+REM  PRINTLN  "G00G90X0Y0"
+     
+REM --- G54 call active workplane ---
+
+     IF PP_9 = 1 THEN
+        PP_9 = PP_9 + 1
+     ENDIF
+
+	RETURN
+
+**********************************************************
+
+*P:1:Process Sheet:TOYODA GOSEI 5AXIS
+10000
+REM --- OPEN FILE -----------------------------------------
+     IF PP_BYTE_MAX>0 OR PP_BLK_LEN>0 THEN
+      OPEN PP_FILE$+".csv01":PP_BLK=1
+     ELSE
+      OPEN PP_FILE$+".csv"
+     ENDIF
+
+REM --- INITIALIZATION ------------------------------------
+     PP_TOOLP_ID=1:PP_6=0:PP_N=1
+REM --- COORDINATES ---------------------------------------
+11100 LOAD_TOOLP:PP_POINT_ID=1
+      GOSUB 12100:PP_6=PP_TOOL_MAG
+     PP_TOOLP_ID=PP_TOOLP_ID+1
+     IF PP_TOOLP_ID<=PP_TOOLP_NR THEN
+         GOTO 11100
+     ENDIF
+
+REM --- CLOSE FILE ----------------------------------------
+     CLOSE
+     STOP
+
+REM --- END -----------------------------------------------
+
+REM =======================================================
+REM --- SUBROUTINES
+REM =======================================================
+
+12100 REM   ----------- TOOL call from COORDINATES section -------------
+     PRINT "V3,5AXIS,"
+********************** add fujimoto 2005/08/02 **************************************
+	PRINT TS_Date$;","
+REM	PRINT TS_Partname$;","
+	PRINT PP_CADNAME$;".cad,"
+********************** add fujimoto 2005/08/02 **************************************
+     PRINT PP_FILE$;","
+********************** add fujimoto 2005/08/02 **************************************
+	PRINT STR$(PP_FIRST_Z,4,3,0,0,1);","
+********************** add fujimoto 2005/08/02 **************************************
+     LOAD_TOOL
+REM -- Tool number --
+	PRINT STR$(PP_TOOL_MAG,2,0,0,2,0);",";WZ_Name$;","
+
+REM -- Tool type --
+	PRINT WZ_Type$;","
+
+	IF WZ_Type=6 THEN	REM --- Center Drill ---
+		PRINT "D";STR$(WZ_DrillDiam,0,3,0,0,0);","
+	ELSE
+		PRINT "D";STR$(WZ_Diameter,0,3,0,0,0);","
+	ENDIF
+
+	IF WZ_Type=1 THEN
+		PRINT "R";STR$(WZ_Diameter/2.0,0,3,0,0,0);","
+	ELSE
+		PRINT "R";STR$(WZ_CornerRad,0,3,0,0,0);","
+	ENDIF
+
+	PRINT "L";STR$(WZ_TotalLen,0,2,0,0,0);","
+	PRINT "H";STR$(WZ_Length,0,2,0,0,0);","
+REM --- Tool Length ---
+	PRINT STR$(WZ_UseableLen,4,0,0,0,1);","
+REM --- Tool comment ---
+     PRINT WZ_Comment$;","
+
+     PRINT NC_ToolRef$;","
+REM --- Machining Method ---
+********************** change fujimoto 2005/05/12 **************************************
+REM  PRINT STR$(WZ_Method,4,2,0,0,1);","
+     PRINT NC_Function$;","
+********************** change fujimoto 2005/05/12 **************************************
+
+REM --- Material ---
+	PRINT NC_Material$;","
+
+REM -- Cooling Code --
+	IF NC_Cooling = 5 THEN		REM Outside water
+		PRINT PP_FLUID_1$;","
+	ELSE
+	IF NC_Cooling = 2 THEN		REM Inside water
+		PRINT PP_FLUID_2$;","
+	ELSE
+		PRINT PP_FLUID_OFF$;","
+	ENDIF
+	ENDIF
+
+REM -- Spindle speed --
+     PRINT STR$(NC_Speed,0,0,0,0,0);","
+
+REM -- Cutting feedrate --
+     PRINT STR$(NC_FeedPath,0,0,0,0,0);","
+
+     PRINT STR$(NC_Thickness,5,3,0,0,1);","
+
+REM -- Stock allow --
+     PRINT STR$(NC_Overmeasure,5,3,0,0,1);","
+
+REM -- Z Pitch --
+	IF NC_Function$ = "MPlanR" THEN
+	     PRINT NC_StepZ$;","
+	ELSE
+	    PRINT "NONE,"
+	ENDIF
+
+REM -- Pick --
+     PRINT STR$(NC_UserStep,5,3,0,0,1);","
+
+REM -- Cycle pattern --
+     PRINT NC_Cycle$;","
+REM     IF NC_Cycle=1 THEN
+REM         PRINT "LACE,"
+REM     ELSE
+REM         PRINT "BOX,"
+REM     ENDIF
+
+REM -- Tolerance --
+     PRINT STR$(NC_Tolerance,5,3,0,0,1);","
+
+REM -- Angle axis --
+    PRINT  "A";STR$(PP_A,0,-3,0,0,1)
+    IF STR$(PP_C,0,-3,0,0,1) = "360." THEN
+		PRINT  "B0.";","
+    ELSE
+		PRINT  "B";STR$(PP_C,0,-3,0,0,1);","
+	ENDIF
+
+REM -- Total Cut length --
+	PRINT STR$(NC_Fraeslaenge,0,2,0,0,0);","
+
+REM -- Cutting time --
+REM --- 理論加工時間変数の書式合わせ
+	PP_45 = NC_Time/60.0
+	PP_1$=STR$(PP_45,7,4,0,2,1)
+	PP_2$=MID$(PP_1$,1,2)	REM --- PP_2$ holds HOURS ---
+	PP_3$="0."+MID$(PP_1$,4,4)
+	PP_45=VAL(PP_3$)*60
+	PP_3$=STR$(PP_45,5,2,0,2,1)
+	PP_4$=MID$(PP_3$,1,2)	REM --- PP_4$ holds MINUTES ---
+	PP_3$="0."+MID$(PP_3$,4,2)
+	PP_45=VAL(PP_3$)*60
+	PP_5$=STR$(PP_45,5,2,0,2,1)
+	PP_5$=MID$(PP_5$,1,2)	REM --- PP_5$ holds SECONDS ---
+	 PRINT  PP_2$;":"
+	 PRINT  PP_4$;":"
+	 PRINT  PP_5$
+	 PRINT  ","
+
+REM -- Z MAX Value --
+	PRINTLN STR$(PP_29,4,2,0,0,1);","
+
+  RETURN
+
+***********************************************************
+REM
+REM	2.5軸加工セクション
+REM
+***********************************************************
+
+* Stop & Close file
+3010 CLOSE:STOP
+RETURN
+
+*** 補助サブルーチン **************************************
+
+* Comment ( output
+3150 PRINT "(":RETURN
+RETURN
+
+3155 PRINTLN ")":RETURN
+RETURN
+
+6100
+RETURN
+
+6900
+RETURN
+
+***********************************************************
+*** 2.5軸メインプログラム *********************************
+*** 1100 → 7000 3軸加工プログラムより分岐 ****************
+***********************************************************
+
+7000
+
+REM * Error check
+REM *IF ABS(PP_I)>0.00001 OR ABS(PP_J)>0.00001 THEN
+REM ** SET_ERROR("ERROR: Working Plane not G17",8):GOTO 3010
+REM * IF NC_Maschine$="" THEN
+REM *  SET_ERROR("ERROR: Machine Head not defined",8):GOTO 3010
+REM * ENDIF
+REM *ENDIF 
+REM *IF PP_CYCLEID=0 THEN
+REM * IF NOT PP_TRA_BEG OR (ABS(PP_I)<0.00001 AND ABS(PP_J)<0.00001) THEN
+REM *  PP_POINT_ID=PP_POINT_ID+1
+REM * ENDIF 
+REM *ENDIF
+
+* XYZ出力
+
+LOAD_POINT
+
+IF PP_RCORR_L=1 OR PP_RCORR_R=1 OR PP_RCORR_OFF=1 THEN
+ IF WZ_Typ<>4 THEN	REM ExceptThread mill
+  GOSUB 7510
+ ENDIF
+ENDIF
+
+IF PP_CYCLEID=0 OR PP_CYCLEID=25 OR PP_CYCLEID=26 OR PP_CYCLEID=27 OR PP_CYCLEID=28 OR PP_CYCLEID=29 THEN
+  GOSUB 7050
+ENDIF
+
+IF PP_CYCLEID=15 THEN
+  GOSUB 7100
+ENDIF
+
+IF PP_CYCLEID=16 THEN
+  GOSUB 7200
+ENDIF
+
+IF PP_CYCLEID=18 THEN
+  GOSUB 8100
+ENDIF
+
+IF PP_CYCLEID=19 THEN
+  GOSUB 8200
+ENDIF
+
+IF PP_CYCLEID=20 THEN
+  GOSUB 8300
+ENDIF
+
+IF PP_CYCLEID=21 THEN
+  GOSUB 8400
+ENDIF
+
+IF PP_CYCLEID=22 THEN
+********************* change 2005/10/20 **************************
+	IF NC_Strategy=21 THEN
+		IF NC_Spindle=0 THEN
+			GOSUB 8600			REM Bore=PT-TAP
+		ELSE
+			GOSUB 8700			REM BORING
+		ENDIF
+	ELSE
+		GOSUB 8500			REM Ream=ELSE
+	ENDIF
+********************* change end *********************************
+ENDIF
+
+* 次のCL点に移動
+
+PP_POINT_ID=PP_POINT_ID+1
+
+IF PP_POINT_ID<=PP_POINT_NR THEN
+  GOTO 7000
+ENDIF
+
+RETURN
+
+*** G00→G01 *********************************
+
+7050
+
+IF PP_G=0 THEN
+
+     PRINT "G01"
+
+     IF ABS(PP_X-PP_35)>0.001 THEN
+	PRINT  STDFORM$(PP_X,PP_1,"X")
+     	PP_35 = PP_X
+     ENDIF
+
+     IF ABS(PP_Y-PP_36)>0.001 THEN
+	PRINT  STDFORM$(PP_Y,PP_1,"Y")
+     	PP_36 = PP_Y
+     ENDIF
+
+     IF ABS(PP_Z-PP_37)>0.001 THEN
+	PRINT  STDFORM$(PP_Z,PP_1,"Z")
+     	PP_37 = PP_Z
+     ENDIF
+
+	IF MID$(WZ_Name$,1,7)="TS600SH" THEN
+		PRINTLN "F100"
+	ELSE
+		PRINTLN PP_6$
+	ENDIF
+
+********************** change fujimoto 2005/05/12 **************************************
+REM  PP_F = 8000
+     PP_F = 80000
+********************** change fujimoto 2005/05/12 **************************************
+
+ELSE
+
+     PRINT "G01"
+
+     IF ABS(PP_X-PP_35)>0.001 THEN
+	PRINT  STDFORM$(PP_X,PP_1,"X")
+     	PP_35 = PP_X
+     ENDIF
+
+     IF ABS(PP_Y-PP_36)>0.001 THEN
+	PRINT  STDFORM$(PP_Y,PP_1,"Y")
+     	PP_36 = PP_Y
+     ENDIF
+
+     IF ABS(PP_Z-PP_37)>0.001 THEN
+	PRINT  STDFORM$(PP_Z,PP_1,"Z")
+     	PP_37 = PP_Z
+     ENDIF
+
+     PRINTLN STDFORM$(PP_F,PP_F,"F")
+
+ENDIF
+
+RETURN
+
+*** 円弧補間 Circle/Spirale/Helix ***
+7100
+
+LOAD_CYCLE
+*PRINTLN "---- KREIS: BegPos:";STDFORM$(PP_ACT_X,PP_1," X");STDFORM$(PP_ACT_Y,PP_1," Y");STDFORM$(PP_ACT_Z,PP_1," Z")
+IF PP_ARC_ANGLE*PP_PLN_DIR>0.0 THEN PRINT "G03" ELSE PRINT "G02" ENDIF
+PRINT STDFORM$(PP_AE_X,PP_1," X");STDFORM$(PP_AE_Y,PP_1," Y");STDFORM$(PP_AE_Z,PP_1," Z")
+IF ABS(PP_PLN_ID)<>19 THEN PRINT STDFORM$(PP_AC_X-PP_ACT_X,PP_1," I") ENDIF
+IF ABS(PP_PLN_ID)<>18 THEN PRINT STDFORM$(PP_AC_Y-PP_ACT_Y,PP_1," J") ENDIF
+IF ABS(PP_PLN_ID)<>17 THEN PRINT STDFORM$(PP_AC_Z-PP_ACT_Z,PP_1," K") ENDIF
+********************** change fujimoto 2005/05/12 **************************************
+PRINTLN STDFORM$(PP_F,PP_F,"F")
+*PRINTLN
+********************** change fujimoto 2005/05/12 **************************************
+PP_35 = PP_AE_X
+PP_36 = PP_AE_Y
+PP_37 = PP_AE_Z
+SKIP("ARC")
+RETURN
+
+7200
+*PRINTLN "ERROR: UP-Helix not supported":GOTO 3010
+LOAD_CYCLE
+
+IF PP_ARC_ANGLE>0.0 THEN PRINT "G03" ELSE PRINT "G02" ENDIF
+PRINT STDFORM$(PP_AE_X,PP_1," X");STDFORM$(PP_AE_Y,PP_1," Y")
+IF ABS(PP_PLN_ID)<>19 THEN PRINT STDFORM$(PP_AC_X-PP_ACT_X,PP_1," I") ENDIF
+IF ABS(PP_PLN_ID)<>18 THEN PRINT STDFORM$(PP_AC_Y-PP_ACT_Y,PP_1," J") ENDIF
+IF ABS(PP_PLN_ID)<>17 THEN PRINT STDFORM$(PP_AC_Z-PP_ACT_Z,PP_1," K") ENDIF
+PRINT STDFORM$(PP_AE_Z,PP_1," Z")
+PRINT PP_SPACE$;"P";STR$((ABS(PP_ARC_ANGLE)+0.001)/360,0,0,0,0,0)
+********************** change fujimoto 2005/05/12 **************************************
+PRINTLN STDFORM$(PP_F,PP_F,"F")
+*PRINTLN
+********************** change fujimoto 2005/05/12 **************************************
+PP_35 = PP_AE_X
+PP_36 = PP_AE_Y
+PP_37 = PP_AE_Z
+SKIP("HELIX")
+RETURN
+
+7510
+IF PP_RCORR_L   THEN
+	PRINT PP_SPACE$;PP_RCORR_L$
+	PRINT "D";STR$(PP_TOOL_MAG+100,3,0,0,2,0)
+ENDIF
+IF PP_RCORR_R   THEN
+	PRINT PP_SPACE$;PP_RCORR_R$
+	PRINT "D";STR$(PP_TOOL_MAG+100,3,0,0,2,0)
+ENDIF
+IF PP_RCORR_OFF THEN
+	PRINT PP_SPACE$;PP_RCORR_OFF$
+ENDIF
+RETURN
+
+***************************************************************************
+*** サイクル  Drill Cycle *************************************************
+***************************************************************************
+
+* Center, Flat, Bore ******************************************************
+8100
+
+PP_1$="HOLE":GOSUB 9000
+IF NC_Dwell>=0.05 THEN 
+ PP_2$="G82":PP_1=-1
+ELSE
+ PP_2$="G81":PP_1=-1
+ENDIF 
+GOSUB 9010
+GOSUB 9090
+RETURN
+
+* Drill Chip-Break ********************************************************
+8200
+
+PP_1$="CHIP BREAK":GOSUB 9000
+PP_2$="G83"
+IF NC_Stroke>NC_CutDepth THEN
+	PP_1=NC_CutDepth
+ELSE
+	PP_1=NC_Stroke
+ENDIF
+GOSUB 9010
+GOSUB 9090
+RETURN
+
+* Drill Chip-Remove *******************************************************
+8300
+
+PP_1$="CHIP REMOVE":GOSUB 9000
+PP_2$="G83"
+IF NC_Stroke>NC_CutDepth THEN
+	PP_1=NC_CutDepth
+ELSE
+	PP_1=NC_Stroke
+ENDIF
+GOSUB 9010
+GOSUB 9090
+RETURN
+
+* Tap *********************************************************************
+8400
+
+PP_1$="THREAD":GOSUB 9000
+IF WZ_RotDir=2 THEN
+* Linksgewinde
+ PP_2$="G74":PP_1=-1
+ELSE
+ PP_2$="G95G84":PP_1=-1
+ENDIF 
+GOSUB 9010
+GOSUB 9090
+RETURN
+
+* Fit (Reamer) ************************************************************
+8500
+
+PP_1$="REAM":GOSUB 9000
+
+REM PP_2$="G82":PP_1=-1
+PP_2$="G81":PP_1=-1
+
+*IF NC_Dwell>=0.05 THEN 
+* PP_2$="G82":PP_1=-1
+*ELSE
+* PP_2$="G81":PP_1=-1
+*ENDIF 
+
+GOSUB 9010
+GOSUB 9090
+RETURN
+
+8501
+
+PP_1$="FIT":GOSUB 9000
+*PRINTLN "Retract=";STR$(NC_Retract,0,0,0,0,0);" Spindle=";STR$(NC_Spindle,0,0,0,0,0)
+
+* Zyklennutzung, Analyse
+
+* Rueckzug mit rueckwaerts laufender Spindel nicht verfuegbar
+IF NC_Spindle=2 THEN GOTO 8999 ENDIF
+
+* Manueller Rueckzug
+IF NC_Retract=1 THEN
+ IF NC_Spindle=1 THEN
+* mit Spindelhalt
+  PP_2$="G88":PP_1=-1
+  GOSUB 9010
+  GOSUB 9090
+ ENDIF
+ GOTO 8999
+ENDIF
+*
+* Rueckzug im Vorschub
+IF NC_Retract=2 THEN
+ IF NC_Spindle=0 THEN
+* mit laufender Spindel
+  IF NC_Dwell>=0.05 THEN
+   PP_2$="G89":PP_1=-1
+  ELSE
+   PP_2$="G85":PP_1=-1
+  ENDIF 
+  GOSUB 9010
+  GOSUB 9090
+ ENDIF
+ GOTO 8999
+ENDIF
+*
+* Rueckzug im Eilgang
+IF NC_Retract=3 THEN
+ IF NC_Spindle=1 THEN
+* mit Spindelhalt
+  IF NC_Dwell>=0.05 THEN 
+   GOTO 8999
+  ELSE 
+   PP_2$="G86":PP_1=-1
+  ENDIF 
+  GOSUB 9010
+  GOSUB 9090
+ ELSE
+* mit laufender Spindel
+  IF NC_Dwell>=0.05 THEN 
+   PP_2$="G82":PP_1=-1
+  ELSE
+   PP_2$="G81":PP_1=-1
+  ENDIF 
+  GOSUB 9010
+  GOSUB 9090
+ ENDIF
+ GOTO 8999
+ENDIF
+*
+* Automatischer Rueckzug (mit idexiertem Spindelhalt)
+IF NC_Retract=4 THEN
+* nicht verfuegbar
+ENDIF
+
+* Zyklus muss aufgeloest werden
+8999 RETURN
+
+********************* add 2005/10/20 **************************
+* Fit (Bore = PT-TAP) *****************************************************
+8600
+
+IF MID$(WZ_Name$,1,6)="TP1X8H" THEN		REM 1/8 D=8.80
+	PP_1= 8.5			REM 基準孔深さ
+	PP_2=25.4/28.0		REM ピッチ
+	PP_3= 8.6			REM 下孔径
+	PP_4= 7.5- 9.1/16	REM 工具先端径
+	PP_5=9.197+0.150*2	REM 基準孔径
+ELSE
+IF MID$(WZ_Name$,1,6)="TP1X4H" THEN		REM 1/4 D=11.65
+	PP_1=12.0			REM 基準孔深さ
+	PP_2=25.4/19.0		REM ピッチ
+	PP_3=11.6			REM 下孔径
+	PP_4=10.0-14.7/16	REM 工具先端径
+	PP_5=12.407+0.187*2	REM 基準孔径
+ELSE
+IF MID$(WZ_Name$,1,6)="TP3X8H" THEN		REM 3/8 D=15.55
+	PP_1=13.0			REM 基準孔深さ
+	PP_2=25.4/19.0		REM ピッチ
+	PP_3=15.5			REM 下孔径
+	PP_4=10.0-14.7/16	REM 工具先端径
+	PP_5=15.85+0.215*2	REM 基準孔径
+ELSE
+IF MID$(WZ_Name$,1,6)="TP1X2H" THEN		REM 1/2 D=18.83
+	PP_1=16.0			REM 基準孔深さ
+	PP_2=25.4/14.0		REM ピッチ
+	PP_3=18.5			REM 下孔径
+	PP_4=12.0-20.0/16	REM 工具先端径
+	PP_5=19.955+0.216*2	REM 基準孔径
+ELSE
+IF MID$(WZ_Name$,1,6)="TP3X4H" THEN		REM 3/4 D=24.55
+	PP_1=18.0			REM 基準孔深さ
+	PP_2=25.4/14.0		REM ピッチ
+	PP_3=24.5			REM 下孔径
+	PP_4=12.0-20.0/16	REM 工具先端径
+	PP_5=25.316+0.303*2	REM 基準孔径
+ELSE
+IF MID$(WZ_Name$,1,6)="TP1X1H" THEN		REM 1/1 D=?????
+	PP_1=20.0			REM 基準孔深さ
+	PP_2=25.4/11.0		REM ピッチ
+	PP_3=30.5			REM 下孔径
+	PP_4=20.0-27.7/16	REM 工具先端径
+	PP_5=31.999+0.278*2	REM 基準孔径
+ELSE
+	PRINTLN "PT-TAP ERROR"
+ENDIF
+ENDIF
+ENDIF
+ENDIF
+ENDIF
+ENDIF
+
+* Cycle Comment
+GOSUB 3150:PRINT "PT-TAP"
+PRINT ", D=";STR$(WZ_Durchmesser,0,2,0,0,0)
+PRINT ", H=";STR$(NC_Depth      ,0,2,0,0,0)
+PRINT ", H=";STR$(PP_1+PP_2*1.25,0,2,0,0,0)
+GOSUB 3155
+
+IF PP_PLN_ID=17 THEN
+  PP_11=PP_X
+  PP_12=PP_Y
+  PP_1$="X"
+  PP_2$="Y"
+  PP_3$="Z"
+  PP_4$="I"
+  PP_5$="J"
+  PP_35 = PP_X
+  PP_36 = PP_Y
+  PP_37 = PP_PLN_NORVAL
+ELSE 
+IF ABS(PP_PLN_ID)=18 THEN
+  PP_11=PP_Z
+  PP_12=PP_X
+  PP_1$="Z"
+  PP_2$="X"
+  PP_3$="Y"
+  PP_4$="K"
+  PP_5$="I"
+  PP_35 = PP_X
+  PP_36 = PP_PLN_NORVAL
+  PP_37 = PP_Z
+ELSE 
+IF ABS(PP_PLN_ID)=19 THEN
+  PP_11=PP_Y
+  PP_12=PP_Z
+  PP_1$="Y"
+  PP_2$="Z"
+  PP_3$="X"
+  PP_4$="J"
+  PP_5$="K"
+  PP_35 = PP_PLN_NORVAL
+  PP_36 = PP_Y
+  PP_37 = PP_Z
+ELSE
+  SET_ERROR("ERROR: Unvalid working plane in DRILLING CYCLE",8):GOTO 3010 
+ENDIF
+ENDIF  
+ENDIF
+
+* Position
+PRINT   "G01"
+PRINT   STDFORM$(PP_11,PP_1,PP_1$)
+PRINT   STDFORM$(PP_12,PP_1,PP_2$)
+PRINTLN "F80000"
+*** Reference point ***
+PRINTLN STDFORM$(PP_PLN_NORVAL,PP_1,PP_3$)
+*** Depth ***
+PP_10=PP_1+PP_2*1.25							REM  最大加工深さ（基準＋1.25ピッチ）
+PRINT   "G01"
+PRINT   STDFORM$(PP_PLN_NORVAL-PP_PLN_DIR*(NC_CutDepth-NC_Depth+PP_10),PP_1,PP_3$)
+PRINTLN "F500"
+*** Approach Line ***
+PP_7=(PP_3-PP_4-PP_10/16)/2						REM  孔上面での下孔とのクリアランス
+PRINTLN STDFORM$(PP_12-PP_7*0.8,PP_1,PP_2$)
+*** Approach CIrcle ***
+PP_8=(PP_5-PP_2/16-PP_4)/2						REM ＋1ピッチでのＣＬ半径
+PP_10=(PP_7*0.8*PP_7*0.8+PP_8*PP_8)/PP_8/2		REM アプローチのＣＬ半径
+PRINT   "G03"
+PRINT   STDFORM$(PP_11+PP_8,PP_1,PP_1$)
+PRINT   STDFORM$(PP_12,PP_1,PP_2$)
+PRINT   STDFORM$(PP_PLN_NORVAL-PP_PLN_DIR*(NC_CutDepth-NC_Depth+PP_1+PP_2),PP_1,PP_3$)
+PRINT   STDFORM$(PP_8-PP_10,PP_1,PP_4$)
+PRINT   STDFORM$(PP_7*0.8,PP_1,PP_5$)
+PRINTLN "F";STR$(NC_VorschubB*(PP_10)/(PP_10+PP_4/2),0,0,0,0,0)
+*** Kako ***
+PP_10=(PP_5-PP_4)/2								REM 基準深さでのＣＬ半径
+*PRINT   "G03.1"
+PRINT   "G03"
+PRINT   STDFORM$(PP_11+PP_10,PP_1,PP_1$)
+PRINT   STDFORM$(PP_PLN_NORVAL-PP_PLN_DIR*(NC_CutDepth-NC_Depth+PP_1),PP_1,PP_3$)
+PRINT   STDFORM$(-PP_8,PP_1,PP_4$)
+PRINT   STDFORM$(0.0,PP_1,PP_5$)
+PRINT   "P1"
+PRINTLN "F";STR$(NC_VorschubB*(PP_10)/(PP_10+PP_4/2),0,0,0,0,0)
+*** Retract Circle ***
+PP_10=(PP_5-PP_4)/4								REM リトラクトのＣＬ半径
+PRINT   "G03"
+PRINT   STDFORM$(PP_11+PP_10,PP_1,PP_1$)
+PRINT   STDFORM$(PP_12+PP_10,PP_1,PP_2$)
+PRINT   STDFORM$(PP_PLN_NORVAL-PP_PLN_DIR*(NC_CutDepth-NC_Depth+(PP_1-PP_2/8)),PP_1,PP_3$)
+PRINT   STDFORM$(-PP_10,PP_1,PP_4$)
+PRINTLN STDFORM$(0.0,PP_1,PP_5$)
+*** Retract Line ***
+PRINT   "G01"
+PRINT   STDFORM$(PP_11,PP_1,PP_1$)
+PRINT   STDFORM$(PP_12,PP_1,PP_2$)
+PRINTLN "F1000"
+*** Retract Z ***
+PRINT   STDFORM$(PP_PLN_NORVAL,PP_1,PP_3$)
+PRINTLN "F80000"
+
+* aufgeloeste Zyklusdaten ueberlesen
+SKIP("HOLE")
+
+RETURN
+
+* Fit (Bore = BORING) *****************************************************
+8700
+PP_1$="BORING":GOSUB 9000
+PP_2$="G86":PP_1=-1
+GOSUB 9010
+GOSUB 9090
+RETURN
+********************* add end *********************************
+
+* Cycle Comment
+9000
+GOSUB 3150:PRINT PP_1$
+PRINT ", D=";STR$(WZ_Durchmesser,0,2,0,0,0)
+PRINT ", H=";STR$(NC_Depth      ,0,2,0,0,0)
+GOSUB 3155
+RETURN
+
+* Cycle Output *******************************************************************************
+9010
+
+*PRINT "S";STR$(NC_Drehzahl,0,0,0,0,0);PP_SPACE$;"F";STR$(NC_VorschubB,0,0,0,0,0);PP_SPACE$
+PRINT PP_2$
+* Position
+IF PP_PLN_ID=17 THEN
+ PRINT STDFORM$(PP_X,PP_1," X");STDFORM$(PP_Y,PP_1," Y")
+ PP_3$="Z"
+ELSE 
+ IF ABS(PP_PLN_ID)=18 THEN
+  PRINT STDFORM$(PP_X,PP_1," X");STDFORM$(PP_Z,PP_1," Z")
+  PP_3$="Y"
+ ELSE 
+  IF ABS(PP_PLN_ID)=19 THEN
+   PRINT STDFORM$(PP_Y,PP_1," Y");STDFORM$(PP_Z,PP_1," Z")
+   PP_3$="X"
+  ELSE
+   SET_ERROR("ERROR: Unvalid working plane in DRILLING CYCLE",8):GOTO 3010 
+  ENDIF
+ ENDIF  
+ENDIF
+
+* Reference point *************************************************
+PRINT STDFORM$(PP_PLN_NORVAL,PP_1," R")
+PP_37=PP_PLN_NORVAL
+
+* Depth ***********************************************************
+REM PRINT PP_3$;STR$(PP_PLN_NORVAL-PP_PLN_DIR*NC_CutDepth,0,-3,0,0,1)
+PRINT PP_3$;STDFORM$(PP_PLN_NORVAL-PP_PLN_DIR*NC_CutDepth,PP_1,"")
+
+* Dwell time ******************************************************
+IF PP_1>0 THEN PRINT STDFORM$(PP_1,PP_1," Q") ENDIF
+IF NC_Dwell>=0.05 THEN
+*	PRINT "P";STR$(NC_Dwell,0,-1,0,0,0)
+	PRINT STDFORM$(NC_Dwell,PP_1,"P")
+ENDIF
+
+* Feed Rate *******************************************************
+IF PP_1$="THREAD" THEN
+    PRINT "S";STR$(NC_Speed,0,0,0,0,0)
+	PRINT "F";STR$(NC_VorschubB/NC_Speed,0,-3,0,0,1)
+ELSE
+	PRINT "F";STR$(NC_VorschubB,0,0,0,0,0)
+ENDIF
+PRINTLN
+RETURN
+
+* Cycle End
+9090
+IF PP_1$="THREAD" THEN
+	PRINTLN "G94G80"
+ELSE
+	PRINTLN "G80"
+ENDIF
+* aufgeloeste Zyklusdaten ueberlesen
+SKIP("HOLE")
+RETURN
+
+
+***************************************************************************
+
+***********************************************************
+

@@ -1,0 +1,1571 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>NcCode</name>
+    </assembly>
+    <members>
+        <member name="T:NcCode.nccode.CodeD">
+            <summary>
+            ＮＣデータの１つのＮＣコードを表します。[不変]
+            </summary>
+        </member>
+        <member name="F:NcCode.nccode.CodeD.macn">
+            <summary>ＮＣデータのマクロコード番号を決定するための文字列</summary>
+        </member>
+        <member name="M:NcCode.nccode.CodeD.SetD(System.Boolean,System.Boolean,System.Nullable{System.Double},System.Int32)">
+            <summary>
+            保存形式の整数値を作成。コンストラクタと比較時に使用する
+            </summary>
+            <param name="axis">座標値か</param>
+            <param name="pir">小数点の有無（false:なし、true:あり）</param>
+            <param name="rdt">データの値</param>
+            <param name="idgt">保存倍率</param>
+            <returns></returns>
+        </member>
+        <member name="M:NcCode.nccode.CodeD.Equals(NcCode.nccode.CodeD,NcCode.nccode.CodeD)">
+            <summary>指定した２つの CodeD オブジェクトが同じ値を表しているかどうかを示す値を返します。</summary>
+            <param name="obj1">比較するオブジェクト１</param>
+            <param name="obj2">比較するオブジェクト２</param>
+            <returns>obj1がobj2の値に等しい場合は true。それ以外の場合は false。</returns>
+        </member>
+        <member name="F:NcCode.nccode.CodeD.axis">
+            <summary>座標値であればtrue（整数値の処理方法の区分に使用）</summary>
+        </member>
+        <member name="F:NcCode.nccode.CodeD.iDigit">
+            <summary>整数化する倍率</summary>
+        </member>
+        <member name="F:NcCode.nccode.CodeD.strData">
+            <summary>数値のＮＣデータそのままの文字列。dtjなどが変更されても変化しないので出力には使用できない</summary>
+        </member>
+        <member name="F:NcCode.nccode.CodeD.ncChar">
+            <summary>ＮＣコード;ABCDEFGHIJKLMNOPQRSTUVWXYZ/(%# 。numと統一するために追加</summary>
+        </member>
+        <member name="P:NcCode.nccode.CodeD.CodeOutput">
+            <summary>ＮＣコードの数値が#0でない場合。（数値が#0の場合はコード自体がないものとみなすため）</summary>
+        </member>
+        <member name="P:NcCode.nccode.CodeD.SetVariable">
+            <summary>マクロ文で、変数代入文の場合trueで制御文の場合falseとなる</summary>
+        </member>
+        <member name="F:NcCode.nccode.CodeD.intData">
+            <summary>ＮＣコードの整数化した値</summary>
+        </member>
+        <member name="F:NcCode.nccode.CodeD.decim">
+            <summary>小数点の有無（false:無し、true:あり）</summary>
+        </member>
+        <member name="F:NcCode.nccode.CodeD.macVNo">
+            <summary>マクロ変数の番号（add in 2010/09/30）</summary>
+        </member>
+        <member name="F:NcCode.nccode.CodeD.macData">
+            <summary>マクロ代入文の値（add in 2010/10/01）</summary>
+        </member>
+        <member name="P:NcCode.nccode.CodeD.MacroNo">
+            <summary>ＮＣコードに対応するマクロコード番号</summary>
+        </member>
+        <member name="M:NcCode.nccode.CodeD.#ctor(System.String,System.Int32,System.Nullable{System.Double})">
+            <summary>
+            代入マクロを作成するコンストラクタ
+            </summary>
+            <param name="p_sdat">ＮＣデータテキスト</param>
+            <param name="macroNo">マクロ変数</param>
+            <param name="data">代入する値</param>
+        </member>
+        <member name="M:NcCode.nccode.CodeD.#ctor(System.Char,System.String,System.Nullable{System.Int32})">
+            <summary>
+            特殊コード（;/%(とマクロ制御指令）を処理するコンストラクタ
+            </summary>
+            <param name="cchar">ＮＣコード</param>
+            <param name="p_sdat">ＮＣデータテキスト</param>
+            <param name="data">データの値</param>
+        </member>
+        <member name="M:NcCode.nccode.CodeD.#ctor(NcCode.nccode.St_vsw,System.String,System.Boolean)">
+            <summary>
+            一般ＮＣデータから作成するコンストラクタ
+            </summary>
+            <param name="v1">マクロ変数値</param>
+            <param name="p_sdat">ＮＣデータテキスト</param>
+            <param name="macroLine">マクロの設定行の場合は true</param>
+        </member>
+        <member name="M:NcCode.nccode.CodeD.#ctor(System.Char,System.Boolean,System.Double,System.Int32)">
+            <summary>
+            ＮＣデータからではなく数値から作成するコンストラクタ
+            </summary>
+            <param name="pChar">ＮＣコード</param>
+            <param name="pir">ピリオドの有無（false:無し、true:あり）</param>
+            <param name="data">データの値</param>
+            <param name="p_idgt">保存倍率</param>
+        </member>
+        <member name="M:NcCode.nccode.CodeD.#ctor(NcCode.nccode.CodeD,System.Int32)">
+            <summary>
+            dtj,ptj以外をコピーするコンストラクタ
+            </summary>
+            <param name="src">元にするCodeD</param>
+            <param name="data">データの値</param>
+        </member>
+        <member name="M:NcCode.nccode.CodeD.Clone">
+            <summary>コピーを作成します</summary>
+            <returns>コピー</returns>
+        </member>
+        <member name="P:NcCode.nccode.CodeD.ToInt_OK">
+            <summary>整数化の可否を判断します</summary>
+        </member>
+        <member name="P:NcCode.nccode.CodeD.ToInt">
+            <summary>整数化した数値を返します（非座標値の場合はidgtの商）</summary>
+        </member>
+        <member name="P:NcCode.nccode.CodeD.ToDouble">
+            <summary>実数化した数値を返します（idgtの商）</summary>
+        </member>
+        <member name="P:NcCode.nccode.CodeD.ToBoolean">
+            <summary>ブーリアン化数値</summary>
+        </member>
+        <member name="M:NcCode.nccode.CodeD.String">
+            <summary>ＮＣデータのままの文字列を出力します（英文字のＮＣコード付）</summary>
+        </member>
+        <member name="M:NcCode.nccode.CodeD.StringMacro">
+            <summary>マクロ制御文の文字列のみを出力します</summary>
+        </member>
+        <member name="M:NcCode.nccode.CodeD.ToString">
+            <summary>使用不可</summary>
+        </member>
+        <member name="M:NcCode.nccode.CodeD.ToStringAuto">
+            <summary>可能であれば整数で出力します</summary>
+        </member>
+        <member name="M:NcCode.nccode.CodeD.ToString(System.String)">
+            <summary>
+            ＮＣデータをフォーマット（実数）して出力します
+            </summary>
+            <param name="baseform">"0."あるいは"0.0"とする。必要な少数点以下の桁も補われる</param>
+            <returns></returns>
+        </member>
+        <member name="M:NcCode.nccode.CodeD.Mirror2(CamUtil.NcZahyo,NcCode.nccode.OCode,CamUtil.CamNcD.MacroCode)">
+            <summary>
+            手順で設定されたミラーを処理します
+            </summary>
+            <param name="p_mirr">ミラー情報</param>
+            <param name="lcode">ＮＣデータ１行の情報</param>
+            <param name="mCode">固定サイクルあるいはカスタムマクロの情報</param>
+            <returns></returns>
+        </member>
+        <member name="M:NcCode.nccode.CodeD.Transp(CamUtil.Vector3,NcCode.nccode.OCode,CamUtil.CamNcD.MacroCode)">
+            <summary>
+            手順で設定された平行移動を処理します
+            </summary>
+            <param name="p_ido">移動ベクトル</param>
+            <param name="lcode">ＮＣデータ１行の情報</param>
+            <param name="mCode">固定サイクルあるいはカスタムマクロの情報</param>
+            <returns></returns>
+        </member>
+        <member name="M:NcCode.nccode.CodeD.Reverse(NcCode.nccode.OCode)">
+            <summary>
+            手順で設定された反転を処理します（現在未使用です）
+            </summary>
+            <param name="lcode">ＮＣデータ１行の情報</param>
+            <returns></returns>
+        </member>
+        <member name="M:NcCode.nccode.CodeD.Equals(NcCode.nccode.CodeD)">
+            <summary>このインスタンスと指定した CodeD オブジェクトが同じ値を表しているかどうかを示す値を返します。</summary>
+            <param name="obj">このインスタンスと比較するオブジェクト。</param>
+            <returns>obj がこのインスタンスの値に等しい場合は true。それ以外の場合は false。</returns>
+        </member>
+        <member name="M:NcCode.nccode.CodeD.Equals(System.Int32)">
+            <summary>整数値との比較</summary>
+        </member>
+        <member name="M:NcCode.nccode.CodeD.Equals(System.Double)">
+            <summary>実数値との比較</summary>
+        </member>
+        <member name="T:NcCode.nccode.CodeDList">
+            <summary>
+            ＮＣデータ１行のＮＣコードを、設定順に保存した CodeD のリストで表します。
+            </summary>
+            <remarks>
+            codedList に関して、Add(), Clear() はコンストラクタのみで使用しているが、RemoveAt(), Insert() はその他で使用しているため[不変]ではありません。
+            </remarks>
+        </member>
+        <member name="P:NcCode.nccode.CodeDList.NcText">
+            <summary>ＮＣデータ１行を解析した場合に設定される１行の文字列をあらわします</summary>
+        </member>
+        <member name="P:NcCode.nccode.CodeDList.Item(System.Int32)">
+            <summary>ＮＣのコード情報を行内指定順に保存されています</summary>
+            <param name="index"></param>
+            <returns></returns>
+        </member>
+        <member name="P:NcCode.nccode.CodeDList.Count">
+            <summary>実際に格納されている要素の数です</summary>
+        </member>
+        <member name="M:NcCode.nccode.CodeDList.CodeCount(System.Char)">
+            <summary>ＮＣコードごとのＮＣデータ１行内での指定数です（A:1 B:2 C:3 D:4 ... ）</summary>
+            <param name="ncc">ＮＣコード</param>
+        </member>
+        <member name="M:NcCode.nccode.CodeDList.CodeData(System.Char)">
+            <summary>コード別にＮＣデータ内容を返します</summary>
+            <param name="ncc">ＮＣコード</param>
+        </member>
+        <member name="F:NcCode.nccode.CodeDList.xDwell">
+            <summary>この行がＸを用いたドウェルを表す場合にtrueとなります</summary>
+        </member>
+        <member name="M:NcCode.nccode.CodeDList.XYZ(System.Nullable{System.Int32})">
+            <summary>XYZの座標値の設定状況を返します</summary>
+            <param name="g3">この座標値があるＮＣデータのＧコードグループ３の値（90 or 91）です。移動の設定値を得る場合に指定します</param>
+            <returns></returns>
+        </member>
+        <member name="M:NcCode.nccode.CodeDList.XY_(System.Int32)">
+            <summary>XY_の座標値の設定状況です</summary>
+            <param name="g3">この座標値があるＮＣデータのＧコードグループ３の値（90 or 91）です</param>
+        </member>
+        <member name="M:NcCode.nccode.CodeDList.ABC(System.Int32)">
+            <summary>ABCの座標値の設定状況</summary>
+        </member>
+        <member name="M:NcCode.nccode.CodeDList.#ctor(System.Collections.Generic.List{NcCode.nccode.CodeD})">
+            <summary>
+            List&gt;CodeD&lt;からOCodeに保存されるCodeDListを作成します。G04の処理はここで実行されます。
+            </summary>
+            <param name="list"></param>
+        </member>
+        <member name="M:NcCode.nccode.CodeDList.#ctor(System.String,NcCode.nccode.NcMachine.Variable)">
+            <summary>
+            ＮＣデータ１行を解析し、ＮＣデータそのままのCodeDのリストを作成します。これを元にOCodeが作成されます。
+            </summary>
+            <param name="ddat">ＮＣデータ行</param>
+            <param name="fsub">使用する変数値</param>
+        </member>
+        <member name="M:NcCode.nccode.CodeDList.ToArray">
+            <summary>要素を新しい配列にコピーします</summary>
+        </member>
+        <member name="M:NcCode.nccode.CodeDList.Add(NcCode.nccode.CodeD)">
+            <summary>末尾に要素を追加します。（内部処理用の単純追加）</summary>
+        </member>
+        <member name="M:NcCode.nccode.CodeDList.Replace(System.Int32,NcCode.nccode.CodeD)">
+            <summary>
+            指定したインデックスの位置にある要素を入れ替えます
+            </summary>
+            <param name="index">インデックス</param>
+            <param name="item">入れ替える要素</param>
+        </member>
+        <member name="M:NcCode.nccode.CodeDList.Equals(NcCode.nccode.CodeDList)">
+            <summary>このインスタンスと指定した CodeDList オブジェクトが同じ値を表しているかどうかを示す値を返します。</summary>
+            <param name="obj">このインスタンスと比較するオブジェクト。</param>
+            <returns>obj がこのインスタンスの値に等しい場合は true。それ以外の場合は false。</returns>
+        </member>
+        <member name="T:NcCode.nccode.NcDst">
+            <summary>
+            複数工具を持つＮＣデータ全体の加工長・加工時間の情報を保存します。
+            </summary>
+        </member>
+        <member name="P:NcCode.nccode.NcDst.CuttingL">
+            <summary>加工長の積算値</summary>
+        </member>
+        <member name="F:NcCode.nccode.NcDst.data">
+            <summary>ＮＣデータ全体の積算値（加工時間、加工長）</summary>
+        </member>
+        <member name="F:NcCode.nccode.NcDst.tol">
+            <summary>工具単位ごとの積算値（加工時間、加工長）のリスト</summary>
+        </member>
+        <member name="P:NcCode.nccode.NcDst.Mfeed">
+            <summary>不明</summary>
+        </member>
+        <member name="P:NcCode.nccode.NcDst.Vdeg">
+            <summary>ＮＣデータの曲がり角度</summary>
+        </member>
+        <member name="T:NcCode.nccode.NcDst.Kub">
+            <summary>送り区分（0:早送り　1:ＸＹ切削送り　2:Ｚ切削送り）</summary>
+        </member>
+        <member name="F:NcCode.nccode.NcDst.Kub.rapid">
+            <summary>早送り</summary>
+        </member>
+        <member name="F:NcCode.nccode.NcDst.Kub.feedx">
+            <summary>切削送りＸＹ</summary>
+        </member>
+        <member name="F:NcCode.nccode.NcDst.Kub.feedz">
+            <summary>切削送りＺ</summary>
+        </member>
+        <member name="T:NcCode.nccode.NcDst.Nctol">
+            <summary>
+            早送り、XY切削送り、Ｚ切削送りごとの加工長、加工時間を保存します。
+            </summary>
+        </member>
+        <member name="F:NcCode.nccode.NcDst.Nctol.rapid">
+            <summary>早送り</summary>
+        </member>
+        <member name="F:NcCode.nccode.NcDst.Nctol.feedx">
+            <summary>切削送りＸＹ</summary>
+        </member>
+        <member name="F:NcCode.nccode.NcDst.Nctol.feedz">
+            <summary>切削送りＺ</summary>
+        </member>
+        <member name="T:NcCode.nccode.NcDst.Nctol.Sub">
+            <summary>
+            Kubごとの加工長、加工時間情報
+            </summary>
+        </member>
+        <member name="F:NcCode.nccode.NcDst.Nctol.Sub.cnt">
+            <summary>出現数</summary>
+        </member>
+        <member name="F:NcCode.nccode.NcDst.Nctol.Sub.xyz">
+            <summary>積算距離</summary>
+        </member>
+        <member name="F:NcCode.nccode.NcDst.Nctol.Sub.tim">
+            <summary>積算時間</summary>
+        </member>
+        <member name="M:NcCode.nccode.NcDst.Nctol.Add(NcCode.nccode.NcDst.Kub,System.Double,System.Double)">
+            <summary>
+            ＮＣデータ移動の距離・時間の積算（dataを廃止するまでの暫定処置としてミュータブルとする）
+            </summary>
+            <param name="kub">移動区分</param>
+            <param name="xyz">移動距離</param>
+            <param name="tim">移動時間</param>
+        </member>
+        <member name="M:NcCode.nccode.NcDst.#ctor(System.Int32)">
+            <summary>
+            初期化コンストラクタ
+            </summary>
+            <param name="dummy"></param>
+        </member>
+        <member name="M:NcCode.nccode.NcDst.ToolAdd">
+            <summary>
+            新しい工具のための積算情報の追加
+            </summary>
+        </member>
+        <member name="M:NcCode.nccode.NcDst.NcDist(NcCode.nccode.NcOuts[],NcCode.nccode.NcMod,NcCode.nccode.NcMachine.Variable)">
+            <summary>
+            新しい移動情報による積算情報の更新
+            </summary>
+            <param name="tmpo">tmpo[0]:加工終了点、tmpo[1]:加工開始点、tmpo[2]:終了の次の加工点</param>
+            <param name="p_fsub">マクロ変数</param>
+            <param name="tmpm0"></param>
+            <returns></returns>
+        </member>
+        <member name="T:NcCode.nccode.NcDst.SubDst">
+            <summary>
+            ＮＣデータ１回（ＮＣデータ１行で２回もありうる）の移動情報を作成します。
+            </summary>
+        </member>
+        <member name="F:NcCode.nccode.NcDst.SubDst.kub">
+            <summary>送り区分（0:早送り　1:ＸＹ切削送り　2:Ｚ切削送り）</summary>
+        </member>
+        <member name="F:NcCode.nccode.NcDst.SubDst.distd">
+            <summary>機械座標系での移動量</summary>
+        </member>
+        <member name="F:NcCode.nccode.NcDst.SubDst.timinc">
+            <summary>加工時間[sec]</summary>
+        </member>
+        <member name="F:NcCode.nccode.NcDst.SubDst.feed1">
+            <summary>送り速度[mm/sec]（feed2は最大切削速度を考慮）</summary>
+        </member>
+        <member name="F:NcCode.nccode.NcDst.SubDst.feed2">
+            <summary>送り速度[mm/sec]（feed2は最大切削速度を考慮）</summary>
+        </member>
+        <member name="M:NcCode.nccode.NcDst.SubDst.#ctor(NcCode.nccode.NcOuts[],NcCode.nccode.NcMod,System.Double,NcCode.nccode.NcMachine.Variable)">
+            <summary>
+            移動の距離・時間・速度などの情報作成
+            </summary>
+            <param name="tmpo">tmpo[0]:加工点の位置（計算対象点）、tmpo[1]:移動前の位置、tmpo[2]:移動先の位置</param>
+            <param name="tmpm0"></param>
+            <param name="efeed"></param>
+            <param name="p_fsub">マクロ変数</param>
+        </member>
+        <member name="T:NcCode.nccode.NcFileReader">
+            <summary>
+            ＮＣファイルの読取りをするクラスです。ユニックスのファイル、リワインドにも対応しています。ＮＣＳＰＥＥＤのコメントの削除もここで実施しています。
+            </summary>
+        </member>
+        <member name="F:NcCode.nccode.NcFileReader.sim">
+            <summary>暫定チェック。シミュレーションのデータの場合</summary>
+        </member>
+        <member name="F:NcCode.nccode.NcFileReader.fp">
+            <summary>StreamReaderクラスのインスタンス</summary>
+        </member>
+        <member name="P:NcCode.nccode.NcFileReader.Ncnam">
+            <summary>ＮＣデータのファイル名</summary>
+        </member>
+        <member name="P:NcCode.nccode.NcFileReader.Sno">
+            <summary>Ｏ番号の開始行番号</summary>
+        </member>
+        <member name="F:NcCode.nccode.NcFileReader.addSemiColon">
+            <summary>読み込むときセミコロンを追加するときtrue</summary>
+        </member>
+        <member name="P:NcCode.nccode.NcFileReader.EndOfStream">
+            <summary>現在のストリームの位置がストリームの末尾かどうかを示す値を取得する</summary>
+        </member>
+        <member name="P:NcCode.nccode.NcFileReader.MaxLineNo">
+            <summary>ＮＣデータの行数（進行状況の表示に使用 ADD in 2014/10/27）</summary>
+        </member>
+        <member name="M:NcCode.nccode.NcFileReader.#ctor(System.String)">
+            <summary>
+            フルファイル名からNcFileReaderを作成します
+            </summary>
+            <param name="path">フルファイル名</param>
+        </member>
+        <member name="M:NcCode.nccode.NcFileReader.#ctor(System.String,System.String[],System.Collections.Generic.List{System.String})">
+            <summary>
+            ＮＣデータファイル名とフォルダーリストからNcFileReaderを作成します
+            </summary>
+            <param name="name">ファイル名</param>
+            <param name="ncdir">探すフォルダーリスト</param>
+            <param name="sfil">サブプログラム名のリスト</param>
+        </member>
+        <member name="M:NcCode.nccode.NcFileReader.Dispose">
+            <summary>
+            この NcCode.nccode.NcFileReader オブジェクトによって使用されている StreamReader fp のリソースを開放します。
+            </summary>
+        </member>
+        <member name="M:NcCode.nccode.NcFileReader.ReadLine">
+            <summary>
+            現在のストリームから１行分の文字を読み取り、そのデータを文字列として返します
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:NcCode.nccode.NcFileReader.Close">
+            <summary>
+            オブジェクトを閉じます
+            </summary>
+        </member>
+        <member name="M:NcCode.nccode.NcFileReader.Rewind">
+            <summary>
+            ストリームの先頭に戻します
+            </summary>
+        </member>
+        <member name="T:NcCode.nccode.NcMachine">
+            <summary>
+            加工する設備のボタンのオン/オフなどの情報を管理します。
+            </summary>
+            <remarks>
+            １．入力するＮＣデータの仕様はPostとし明確に区分したい。2008/9/25
+            ２．シミュレーションの場合は加工機の情報とＮＣデータ仕様は一致する2010/04/08
+            </remarks>
+        </member>
+        <member name="F:NcCode.nccode.NcMachine.set2401">
+            <summary>パラメータ2401にセット可能な場合はtrue</summary>
+        </member>
+        <member name="F:NcCode.nccode.NcMachine.oskip">
+            <summary>オプショナルスキップ（OFF:false ON:true）</summary>
+        </member>
+        <member name="F:NcCode.nccode.NcMachine.ostop">
+            <summary>オプショナルストップ（OFF:false ON:true）</summary>
+        </member>
+        <member name="F:NcCode.nccode.NcMachine.mmirs">
+            <summary>ミラースイッチＸＹＺ（OFF:false ON:true）</summary>
+        </member>
+        <member name="F:NcCode.nccode.NcMachine.tchg">
+            <summary>工具交換するＭコード番号</summary>
+        </member>
+        <member name="F:NcCode.nccode.NcMachine.t0">
+            <summary>時定数1620</summary>
+        </member>
+        <member name="F:NcCode.nccode.NcMachine.t1">
+            <summary>時定数1622</summary>
+        </member>
+        <member name="F:NcCode.nccode.NcMachine.t2">
+            <summary>時定数1825</summary>
+        </member>
+        <member name="F:NcCode.nccode.NcMachine.th">
+            <summary>時定数1827</summary>
+        </member>
+        <member name="F:NcCode.nccode.NcMachine.gosa">
+            <summary>時定数による停止誤差</summary>
+        </member>
+        <member name="F:NcCode.nccode.NcMachine.sgc">
+            <summary>Ｇコードの読み替えリスト</summary>
+        </member>
+        <member name="F:NcCode.nccode.NcMachine.parad">
+            <summary>パラメータのデータ番号のリスト。同じ位置のparaaに情報が保存される</summary>
+        </member>
+        <member name="F:NcCode.nccode.NcMachine.paraa">
+            <summary>パラメータのデータ</summary>
+        </member>
+        <member name="P:NcCode.nccode.NcMachine.MIRROR">
+            <summary>パラメータミラー情報（null:OFF, 0:ON）</summary>
+        </member>
+        <member name="M:NcCode.nccode.NcMachine.Offset(System.Int32)">
+            <summary>座標系設定</summary>
+        </member>
+        <member name="F:NcCode.nccode.NcMachine.mirIndex">
+            <summary>ミラーのパラメータ１２の保存位置</summary>
+        </member>
+        <member name="F:NcCode.nccode.NcMachine.ttim">
+            <summary>
+            工具交換時間
+            </summary>
+        </member>
+        <member name="F:NcCode.nccode.NcMachine.GCodeMacro">
+            <summary>
+            Ｇコードマクロのリスト
+            </summary>
+        </member>
+        <member name="M:NcCode.nccode.NcMachine.ParaInit(CamUtil.Machine.MachID)">
+            <summary>
+            加工機パラメータの設定
+            </summary>
+            <param name="mID"></param>
+        </member>
+        <member name="M:NcCode.nccode.NcMachine.G10ParaSet(NcCode.nccode.OCode)">
+            <summary>
+            G10 によるパラメータの設定
+            </summary>
+            <param name="tcode"></param>
+        </member>
+        <member name="M:NcCode.nccode.NcMachine.ParaSet(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            ＮＣのパラメータとsdgt（小数点なしの場合の単位）の初期設定
+            </summary>
+            <param name="codn">パラメータＮｏ</param>
+            <param name="codp">サブパラメータＮｏ</param>
+            <param name="codd">入力データ</param>
+        </member>
+        <member name="M:NcCode.nccode.NcMachine.ParaValue(System.Int32,System.Int32)">
+            <summary>
+            パラメータ値の定義の有無をチェック
+            </summary>
+            <param name="itmp">パラメータのデータ番号</param>
+            <param name="jtmp">パラメータのサブ番号(0, 1, 2)</param>
+            <returns></returns>
+        </member>
+        <member name="M:NcCode.nccode.NcMachine.ParaData1420">
+            <summary>各軸の早送り速度(mm/min)</summary>
+            <returns></returns>
+        </member>
+        <member name="M:NcCode.nccode.NcMachine.ParaData1422">
+            <summary>各軸の最大切削送り速度(mm/min)</summary>
+        </member>
+        <member name="M:NcCode.nccode.NcMachine.ParaData(System.Int32,System.Int32)">
+            <summary>
+            パラメータの値を返す
+            </summary>
+            <param name="itmp">パラメータのデータ番号</param>
+            <param name="jtmp">パラメータのサブ番号(0, 1, 2)</param>
+            <returns>パラメータ値</returns>
+        </member>
+        <member name="M:NcCode.nccode.NcMachine.Parag(System.Int32,System.Int32)">
+            <summary>
+            パラメータparaaの値の保管位置を示す
+            </summary>
+            <param name="itmp">パラメータのデータ番号</param>
+            <param name="jtmp">パラメータのサブ番号(0, 1, 2)</param>
+            <returns>パラメータの値の保管場所</returns>
+        </member>
+        <member name="T:NcCode.nccode.NcMachine.Variable">
+            <summary>
+            マクロ変数値（local : 0-33、global : 100-6000）
+            </summary>
+        </member>
+        <member name="F:NcCode.nccode.NcMachine.Variable.mVALMAX">
+            <summary>コモン変数の最大値</summary>
+        </member>
+        <member name="F:NcCode.nccode.NcMachine.Variable.MMAX">
+            <summary>ローカル変数の最大値</summary>
+        </member>
+        <member name="F:NcCode.nccode.NcMachine.Variable.ltemp">
+            <summary>ローカル変数を保存する場所</summary>
+        </member>
+        <member name="F:NcCode.nccode.NcMachine.Variable.stemp">
+            <summary>コモン変数を保存する場所</summary>
+        </member>
+        <member name="M:NcCode.nccode.NcMachine.Variable.Init">
+            <summary>
+            コモン変数の初期化
+            </summary>
+        </member>
+        <member name="M:NcCode.nccode.NcMachine.Variable.VariSet(System.Int32,System.Nullable{System.Double})">
+            <summary>コモン変数のセット</summary>
+            <param name="num">コモン変数番号</param>
+            <param name="value">データ</param>
+        </member>
+        <member name="M:NcCode.nccode.NcMachine.Variable.VariData(System.Int32)">
+            <summary>コモン変数の取出し</summary>
+            <param name="num">コモン変数番号</param>
+            <returns></returns>
+        </member>
+        <member name="M:NcCode.nccode.NcMachine.Variable.#ctor">
+            <summary>コンストラクタ（ローカル変数コモン変数を初期化）</summary>
+        </member>
+        <member name="M:NcCode.nccode.NcMachine.Variable.#ctor(NcCode.nccode.NcMachine.Variable)">
+            <summary>コンストラクタ（ローカル変数をすべてnullとして初期化。コモン変数は共有）</summary>
+        </member>
+        <member name="P:NcCode.nccode.NcMachine.Variable.WorkIchi">
+            <summary>
+            直前のブロックの終点位置ABC（ワーク座標系）
+            </summary>
+        </member>
+        <member name="P:NcCode.nccode.NcMachine.Variable.Item(System.Int32)">
+            <summary>
+            マクロ変数値のget/set
+            </summary>
+            <param name="num"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NcCode.nccode.NcMachine.Variable.SystemSet_IDO(NcCode.nccode.NcOuts)">
+            <summary>
+            現在の機械座標系の位置を設定する
+            </summary>
+            <param name="out0"></param>
+        </member>
+        <member name="M:NcCode.nccode.NcMachine.Variable.SystemSet_COPY(NcCode.nccode.NcOuts)">
+            <summary>
+            直前のブロックのモーダル情報を設定する
+            </summary>
+            <param name="out0"></param>
+        </member>
+        <member name="M:NcCode.nccode.NcMachine.Variable.SystemSet(System.Int32,CamUtil.LCode.Gcode)">
+            <summary>
+            システム変数へのセット（Ｇコードグループ）
+            </summary>
+            <param name="ichar"></param>
+            <param name="gcode"></param>
+        </member>
+        <member name="M:NcCode.nccode.NcMachine.Variable.SystemSet_PROBE(CamUtil.Ichi)">
+            <summary>
+            プローブの位置情報の設定
+            </summary>
+            <param name="data"></param>
+        </member>
+        <member name="M:NcCode.nccode.NcMachine.Variable.SystemSet_PROBE(System.Double)">
+            <summary>
+            
+            </summary>
+            <param name="data"></param>
+        </member>
+        <member name="M:NcCode.nccode.NcMachine.Variable.SystemSet_NCCODE(NcCode.nccode.OCode)">
+            <summary>ＮＣデータ１行の情報（OCode）による変数の設定</summary>
+            <param name="ocode"></param>
+        </member>
+        <member name="T:NcCode.nccode.NcMod">
+            <summary>
+            ＮＣデータのモーダル値を保持します。
+            </summary>
+        </member>
+        <member name="F:NcCode.nccode.NcMod.ncCodeList">
+            <summary>各ＮＣコードの値を保存するリストを作成するために使用します</summary>
+        </member>
+        <member name="F:NcCode.nccode.NcMod.toolNoList">
+            <summary>
+            使用している工具番号を保存する。tno[0]は常に0であり、tno[1]から追加する。
+            nctim でのみ使用し、ＮＣデータ行とは無関係である。
+            </summary>
+        </member>
+        <member name="F:NcCode.nccode.NcMod.fixString">
+            <summary>固定サイクル登録名の最初の文字列</summary>
+        </member>
+        <member name="P:NcCode.nccode.NcMod.ToolNo">
+            <summary>工具番号</summary>
+        </member>
+        <member name="P:NcCode.nccode.NcMod.Tptr">
+            <summary>保存されている工具番号toolNoListへのポインタ</summary>
+        </member>
+        <member name="P:NcCode.nccode.NcMod.ToolCount">
+            <summary>工具番号の現在の使用数</summary>
+        </member>
+        <member name="P:NcCode.nccode.NcMod.CodeValue">
+            <summary>各ＮＣコードの値（FはＦ一桁送りを考慮した値）</summary>
+        </member>
+        <member name="P:NcCode.nccode.NcMod.GGroupValue">
+            <summary>各Ｇコードグループの値</summary>
+        </member>
+        <member name="P:NcCode.nccode.NcMod.Hokan">
+            <summary>現在行の補間モード（G00,G01,G02,G03）</summary>
+        </member>
+        <member name="P:NcCode.nccode.NcMod.CoordinatesNo">
+            <summary>座標系番号（0:G54）</summary>
+        </member>
+        <member name="P:NcCode.nccode.NcMod.G10">
+            <summary>パラメータの設定モード（ＯＮ：５０）</summary>
+        </member>
+        <member name="P:NcCode.nccode.NcMod.Mcro">
+            <summary>マクロ文、マクロ定義文とM98,M99（false:出力対象のＮＣ文）</summary>
+        </member>
+        <member name="P:NcCode.nccode.NcMod.NcLineNo">
+            <summary>メインＮＣデータの行番号</summary>
+        </member>
+        <member name="F:NcCode.nccode.NcMod.subInfo">
+            <summary>サブをオープンするための情報。NcRW.nextPro.readInfoに情報を渡すため、ここでは変更点のみを出力する ADD in 2007/10/04</summary>
+        </member>
+        <member name="P:NcCode.nccode.NcMod.Subk">
+            <summary>サブプログラムの呼び出し方法（0:メイン(無し) 1:固定サイクル 2:マクロ 3:通常サブ）</summary>
+        </member>
+        <member name="P:NcCode.nccode.NcMod.Lost">
+            <summary>停止時間（DWELL,M06）</summary>
+        </member>
+        <member name="P:NcCode.nccode.NcMod.Pmirror">
+            <summary>プログラマブルミラーのＯＮＯＦＦ（==null:ミラーＯＦＦ else:ミラーＯＮ）</summary>
+        </member>
+        <member name="P:NcCode.nccode.NcMod.ScaleValue">
+            <summary>ＸＹＺのスケーリング値</summary>
+        </member>
+        <member name="P:NcCode.nccode.NcMod.ScaleCenter">
+            <summary>スケーリングの中心座標値</summary>
+        </member>
+        <member name="P:NcCode.nccode.NcMod.RotationPlane">
+            <summary>座標回転平面</summary>
+        </member>
+        <member name="P:NcCode.nccode.NcMod.RotationAngle">
+            <summary>座標回転角度（deg）</summary>
+        </member>
+        <member name="P:NcCode.nccode.NcMod.RotationCenter">
+            <summary>座標回転中心座標値</summary>
+        </member>
+        <member name="P:NcCode.nccode.NcMod.OffsetG92">
+            <summary>G92 による座標オフセットＸＹＺ</summary>
+        </member>
+        <member name="P:NcCode.nccode.NcMod.LoopNo">
+            <summary>
+            繰り返し数（１ショットであり、モーダル値であるsubInfo.iloopとは異なる）
+            ido.subkを削除可能にするために新たに設ける 2017/09/29
+            </summary>
+        </member>
+        <member name="M:NcCode.nccode.NcMod.#ctor">
+            <summary>
+            初期値を代入するコンストラクタ
+            </summary>
+        </member>
+        <member name="M:NcCode.nccode.NcMod.Clone">
+            <summary>
+            ディープコピーによりクローンを作成します。
+            ディープコピーコンストラクタより約３０％コストが低いためこちらを使用します。
+            </summary>
+        </member>
+        <member name="M:NcCode.nccode.NcMod.Params2401(System.Int32)">
+            <summary>
+            Ｇグループ初期値をパラメータ2401により設定する
+            </summary>
+            <param name="paras2401">params(2401,0)</param>
+        </member>
+        <member name="T:NcCode.nccode.NcMod.Fmsub">
+            <summary>
+            現在読込みするＮＣデータのモード（固定サイクル、カスタムマクロ、サブプログラム）の状況を保持します。
+            処理中の行の情報は ncmod にて保存されます。
+            </summary>
+        </member>
+        <member name="F:NcCode.nccode.NcMod.Fmsub.subk">
+            <summary>サブ呼出し方法でキャンセルを含む設定行でのみセットされる（0:メイン(無し) 1:固定サイクル 2:マクロ 3:通常サブ）</summary>
+        </member>
+        <member name="F:NcCode.nccode.NcMod.Fmsub.iloop">
+            <summary>繰り返し回数</summary>
+        </member>
+        <member name="F:NcCode.nccode.NcMod.Fmsub.ncnam">
+            <summary>ＮＣのファイル名</summary>
+        </member>
+        <member name="F:NcCode.nccode.NcMod.Fmsub.fsubt">
+            <summary>固定サイクル、カクタムマクロを呼び出す時のローカル変数初期値のリスト</summary>
+        </member>
+        <member name="M:NcCode.nccode.NcMod.Fmsub.#ctor(System.Int16,System.Nullable{System.Int32},System.String)">
+            <summary></summary>
+        </member>
+        <member name="M:NcCode.nccode.NcMod.Fmsub.#ctor(System.Int16,System.Nullable{System.Int32},System.String,System.Collections.Generic.List{NcCode.nccode.NcMod.Fmsub.FsubT})">
+            <summary></summary>
+        </member>
+        <member name="M:NcCode.nccode.NcMod.Fmsub.#ctor(NcCode.nccode.NcMod.Fmsub)">
+            <summary>
+            ディープコピーするコンストラクタ
+            </summary>
+            <param name="src"></param>
+        </member>
+        <member name="M:NcCode.nccode.NcMod.Fmsub.SetFsub(System.Collections.Generic.List{NcCode.nccode.NcMod.Fmsub.FsubT})">
+            <summary>新たな引数で変数代入リストを更新する（まだ未使用）</summary>
+        </member>
+        <member name="M:NcCode.nccode.NcMod.Fmsub.Equals(NcCode.nccode.NcMod.Fmsub)">
+            <summary>このインスタンスと指定した Fmsub オブジェクトが同じ値を表しているかどうかを示す値を返します。</summary>
+            <param name="obj">このインスタンスと比較するオブジェクト。</param>
+            <returns>obj がこのインスタンスの値に等しい場合は true。それ以外の場合は false。</returns>
+        </member>
+        <member name="T:NcCode.nccode.NcMod.Fmsub.FsubT">
+            <summary>固定サイクル、カクタムマクロを呼び出す時のローカル変数初期値</summary>
+        </member>
+        <member name="F:NcCode.nccode.NcMod.Fmsub.FsubT.varia">
+            <summary>代入する変数の番号</summary>
+        </member>
+        <member name="F:NcCode.nccode.NcMod.Fmsub.FsubT.value">
+            <summary>代入する値</summary>
+        </member>
+        <member name="M:NcCode.nccode.NcMod.Fmsub.FsubT.#ctor(System.Int32,System.Double)">
+            <summary>
+            コンストラクタ
+            </summary>
+            <param name="p_varia">変数の番号</param>
+            <param name="p_value">値</param>
+        </member>
+        <member name="T:NcCode.nccode.NcMod.Ido">
+            <summary>
+            現在行の処理事項を決定するための情報を保存します。
+            </summary>
+        </member>
+        <member name="F:NcCode.nccode.NcMod.Ido.pass">
+            <summary>移動状態 0:移動 1:ＸＹのみ 2:移動なし 3:無意データ</summary>
+        </member>
+        <member name="F:NcCode.nccode.NcMod.Ido.norm">
+            <summary>データ内容（0:一般データ 1: 2:）</summary>
+        </member>
+        <member name="M:NcCode.nccode.NcMod.Ido.#ctor(System.Int32)">
+            <summary>
+            コンストラクタ
+            </summary>
+            <param name="dummy">無意味</param>
+        </member>
+        <member name="M:NcCode.nccode.NcMod.Ido.#ctor(System.Int32,System.Int32)">
+            <summary>
+            コンストラクタ
+            </summary>
+            <param name="pass">移動状態</param>
+            <param name="norm">データ内容</param>
+        </member>
+        <member name="M:NcCode.nccode.NcMod.NcCod2(NcCode.nccode.OCode,NcCode.nccode.NcMod.Ido@,System.Boolean,NcCode.nccode.Ncdep,NcCode.nccode.NcMachine.Variable)">
+            <summary>
+            ncmod の設定
+            </summary>
+            <param name="tcode">ncModの元となるＮＣデータ行の情報</param>
+            <param name="ido">実行後に実施すべき動作を決定する情報</param>
+            <param name="p0006">M98P0006(ＮＣデータ終了処理)をコードを読まずに処理(ncgen)</param>
+            <param name="sdep"></param>
+            <param name="p_fsub">使用している変数リスト</param>
+            <returns>エラーの有無</returns>
+        </member>
+        <member name="M:NcCode.nccode.NcMod.SetMac(NcCode.nccode.OCode,NcCode.nccode.Ncdep)">
+            <summary>
+            マクロのモード処理
+            </summary>
+            <param name="lcode"></param>
+            <param name="sdep"></param>
+        </member>
+        <member name="M:NcCode.nccode.NcMod.SetFix(NcCode.nccode.OCode,NcCode.nccode.Ncdep,NcCode.nccode.NcMachine.Variable)">
+            <summary>
+            固定サイクルの処理
+            </summary>
+            <param name="lcode"></param>
+            <param name="sdep"></param>
+            <param name="p_fsub"></param>
+        </member>
+        <member name="M:NcCode.nccode.NcMod.SetNrm(NcCode.nccode.OCode,NcCode.nccode.Ncdep)">
+            <summary>
+            非サイクルモード時の各コードのモード設定
+            </summary>
+            <param name="lcode"></param>
+            <param name="sdep"></param>
+        </member>
+        <member name="M:NcCode.nccode.NcMod.P0006(NcCode.nccode.OCode)">
+            <summary>
+            １工具の加工終了処理M98P0006の動作をプログラムで実行
+            </summary>
+            <param name="tcode">ncModの元となるＮＣデータ行の情報</param>
+        </member>
+        <member name="M:NcCode.nccode.NcMod.Equals(NcCode.nccode.NcMod)">
+            <summary>このインスタンスと指定した NcMod オブジェクトが同じ値を表しているかどうかを示す値を返します。</summary>
+            <param name="obj">このインスタンスと比較するオブジェクト。</param>
+            <returns>obj がこのインスタンスの値に等しい場合は true。それ以外の場合は false。</returns>
+        </member>
+        <member name="T:NcCode.nccode.NcOut">
+            <summary>
+            ＮＣデータ１行により移動する複数の位置情報を保存します。
+            </summary>
+        </member>
+        <member name="F:NcCode.nccode.NcOut.imac">
+            <summary>関連するlcode,modの保存位置</summary>
+        </member>
+        <member name="F:NcCode.nccode.NcOut.CHUU">
+            <summary>最終位置と中間点の最大数</summary>
+        </member>
+        <member name="P:NcCode.nccode.NcOut.Out0">
+            <summary>ＮＣデータ１行により発生する加工機の最終位置情報</summary>
+        </member>
+        <member name="F:NcCode.nccode.NcOut.outn">
+            <summary>ＮＣデータ１行により発生する加工機の中間位置情報</summary>
+        </member>
+        <member name="M:NcCode.nccode.NcOut.#ctor(CamUtil.Ichi)">
+            <summary>
+            初期化
+            </summary>
+            <param name="ichi">初期の位置</param>
+        </member>
+        <member name="M:NcCode.nccode.NcOut.#ctor(NcCode.nccode.NcOut,System.Boolean)">
+            <summary>
+            前行の情報を用いて新規ＮＣデータ行のモード情報を作成する
+            </summary>
+            <param name="src"></param>
+            <param name="mcro"></param>
+        </member>
+        <member name="P:NcCode.nccode.NcOut.Item(System.Int32)">
+            <summary>
+            加工機の位置情報（0:最終位置、else:中間点）
+            </summary>
+            <param name="index"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NcCode.nccode.NcOut.Ncxyz(System.Int32,NcCode.nccode.OCode,NcCode.nccode.NcMod,NcCode.nccode.NcMachine.Variable)">
+            <summary>
+            加工機の位置を算出する
+            </summary>
+            <param name="idopass">移動状態 0:移動 1:ＸＹのみ 2:移動なし 3:無意データ</param>
+            <param name="lcode"></param>
+            <param name="mod0"></param>
+            <param name="p_fsub">マクロ変数</param>
+        </member>
+        <member name="M:NcCode.nccode.NcOut.Chukan">
+            <summary>
+            早送り中間点の作成
+            </summary>
+        </member>
+        <member name="T:NcCode.nccode.NcOuts">
+            <summary>
+            ＮＣデータにより移動する単一の位置情報を保存します。[不変]
+            </summary>
+        </member>
+        <member name="P:NcCode.nccode.NcOuts.Hokan">
+            <summary>移動補間方法 0:早送り 1:直線 2:円弧 3:円弧</summary>
+        </member>
+        <member name="F:NcCode.nccode.NcOuts.idoa">
+            <summary>移動有無と補正 0:なし 1:工具径補正なしの移動 2:工具径補正ありの移動</summary>
+        </member>
+        <member name="F:NcCode.nccode.NcOuts.heimn">
+            <summary>平面指定ＸＹＺベクトル（G17=0,0,1）</summary>
+        </member>
+        <member name="P:NcCode.nccode.NcOuts.Pls">
+            <summary>移動量（中間点の場合も常に加工開始点からの量）</summary>
+        </member>
+        <member name="P:NcCode.nccode.NcOuts.Cloc">
+            <summary>機械座標値（ミラー、回転、中間点等を含む）</summary>
+        </member>
+        <member name="P:NcCode.nccode.NcOuts.Ichi">
+            <summary>移動先の絶対位置（ＮＣデータ値）</summary>
+        </member>
+        <member name="P:NcCode.nccode.NcOuts.Ichj">
+            <summary>移動先の絶対位置（ミラー、回転、中間点等を含む）</summary>
+        </member>
+        <member name="P:NcCode.nccode.NcOuts.Rad0">
+            <summary>円弧補間の半径</summary>
+        </member>
+        <member name="P:NcCode.nccode.NcOuts.Centr">
+            <summary>円弧補間の中心（円弧終点基準）</summary>
+        </member>
+        <member name="P:NcCode.nccode.NcOuts.Deg">
+            <summary>円弧補間の回転角度</summary>
+        </member>
+        <member name="M:NcCode.nccode.NcOuts.Clone">
+            <summary>クローン</summary>
+        </member>
+        <member name="M:NcCode.nccode.NcOuts.#ctor(CamUtil.Ichi)">
+            <summary>
+            初期化コンストラクタです
+            </summary>
+            <param name="ichi">初期の座標値</param>
+        </member>
+        <member name="M:NcCode.nccode.NcOuts.#ctor(NcCode.nccode.NcOuts)">
+            <summary>
+            out0 の初期化を実行します（コンストラクタ）
+            </summary>
+            <param name="src">元のNcOuts</param>
+        </member>
+        <member name="M:NcCode.nccode.NcOuts.#ctor(NcCode.nccode.NcOuts,CamUtil.Ichi)">
+            <summary>
+            中間点の作成など新たな座標値を設定します（コンストラクタ）
+            </summary>
+            <param name="src">元のNcOuts</param>
+            <param name="itmp">移動の残量</param>
+        </member>
+        <member name="M:NcCode.nccode.NcOuts.#ctor(NcCode.nccode.NcOuts,System.Int32,NcCode.nccode.OCode,NcCode.nccode.NcMod,NcCode.nccode.NcMachine.Variable)">
+            <summary>
+            更新するコンストラクタ
+            </summary>
+            <param name="src">コピー元</param>
+            <param name="idopass">移動状態 0:移動 1:ＸＹのみ 2:移動なし 3:無意データ</param>
+            <param name="lcode"></param>
+            <param name="mod0"></param>
+            <param name="p_fsub">マクロ変数</param>
+        </member>
+        <member name="M:NcCode.nccode.NcOuts.SetIchi(CamUtil.Ichi,System.Int32,NcCode.nccode.OCode,NcCode.nccode.NcMod,NcCode.nccode.NcMachine.Variable)">
+            <summary>
+            新しい移動位置を計算します
+            </summary>
+            <param name="src_ichi"></param>
+            <param name="idopass">移動状態 0:移動 1:ＸＹのみ 2:移動なし 3:無意データ</param>
+            <param name="lcode">現在行のデータ</param>
+            <param name="mod0">現在行のモーダル値</param>
+            <param name="p_fsub">マクロ変数</param>
+        </member>
+        <member name="M:NcCode.nccode.NcOuts.SetCentr(CamUtil.Ichi,NcCode.nccode.OCode,NcCode.nccode.NcMod)">
+            <summary>
+            新しい円弧補間中心を計算します
+            </summary>
+            <param name="p_mov">移動量</param>
+            <param name="lcode">現在行のデータ</param>
+            <param name="mod0">現在行のモーダル値</param>
+        </member>
+        <member name="M:NcCode.nccode.NcOuts.Mirror(System.Int32@,CamUtil.Ichi@,CamUtil.Vector3@,System.Double@,System.Double@,NcCode.nccode.NcMod)">
+            <summary>
+            ミラー・スケール・回転を処理します
+            </summary>
+            <param name="p_hokan"></param>
+            <param name="p_ichj"></param>
+            <param name="p_centr"></param>
+            <param name="p_rad0"></param>
+            <param name="p_rad1"></param>
+            <param name="mod0"></param>
+        </member>
+        <member name="M:NcCode.nccode.NcOuts.SetIdo(System.Int32,NcCode.nccode.NcMod)">
+            <summary>
+            移動有無と補正情報を計算します
+            </summary>
+            <param name="src_idoa"></param>
+            <param name="mod0"></param>
+        </member>
+        <member name="T:NcCode.nccode.NcRW">
+            <summary>
+            ファイルからＮＣデータの読み込み、書き込みを処理するクラスです。１行ごとの双方処理が可能です。
+            </summary>
+        </member>
+        <member name="F:NcCode.nccode.NcRW.FIXMAX">
+            <summary>固定サイクル呼び出しの最大値</summary>
+        </member>
+        <member name="F:NcCode.nccode.NcRW.MACMAX">
+            <summary>マクロ呼び出しの最大値</summary>
+        </member>
+        <member name="F:NcCode.nccode.NcRW.SUBMAX">
+            <summary>サブプロ呼び出しの最大値</summary>
+        </member>
+        <member name="F:NcCode.nccode.NcRW.sakiy0">
+            <summary>noutデータの最大位置（＝保存しているnoutデータ数－１）</summary>
+        </member>
+        <member name="F:NcCode.nccode.NcRW.sakiy1">
+            <summary>現在保存すべきnoutデータ数</summary>
+        </member>
+        <member name="F:NcCode.nccode.NcRW.hichoku">
+            <summary>非直線の位置の出力モード（true:出力）</summary>
+        </member>
+        <member name="T:NcCode.nccode.NcRW.Mthd">
+            <summary>
+            ＮＣ制御文の現在の状況を保存します。
+            </summary>
+        </member>
+        <member name="T:NcCode.nccode.NcRW.Mthd.MODE">
+            <summary>制御文の状況区分</summary>
+        </member>
+        <member name="F:NcCode.nccode.NcRW.Mthd.MODE.NORMAL">
+            <summary>非制御文</summary>
+        </member>
+        <member name="F:NcCode.nccode.NcRW.Mthd.MODE.GOTO">
+            <summary>マクロＧＯＴＯ文</summary>
+        </member>
+        <member name="F:NcCode.nccode.NcRW.Mthd.MODE.WHILE_END">
+            <summary>マクロＷＨＩＬＥの終了文</summary>
+        </member>
+        <member name="F:NcCode.nccode.NcRW.Mthd.MODE.WHILE_NO">
+            <summary>マクロＷＨＩＬＥの不成立</summary>
+        </member>
+        <member name="F:NcCode.nccode.NcRW.Mthd.MODE.WHILE_YES">
+            <summary>マクロＷＨＩＬＥの成立</summary>
+        </member>
+        <member name="F:NcCode.nccode.NcRW.Mthd.control">
+            <summary>ＮＣ制御文の種類</summary>
+        </member>
+        <member name="F:NcCode.nccode.NcRW.Mthd.gotoNo">
+            <summary>GOTOのシーケンスナンバー、DOループのナンバー</summary>
+        </member>
+        <member name="M:NcCode.nccode.NcRW.Mthd.#ctor(System.Int32)">
+            <summary></summary>
+        </member>
+        <member name="M:NcCode.nccode.NcRW.Mthd.#ctor(NcCode.nccode.NcRW.Mthd.MODE,System.Int32)">
+            <summary></summary>
+        </member>
+        <member name="M:NcCode.nccode.NcRW.Mthd.UpDate(NcCode.nccode.NcRW.Mthd.MODE,System.Int32)">
+            <summary>ＮＣ制御文の現在の状況の更新</summary>
+        </member>
+        <member name="M:NcCode.nccode.NcRW.Mthd.UpDate(NcCode.nccode.NcRW.Mthd.MODE)">
+            <summary>ＮＣ制御文の現在の状況の更新</summary>
+        </member>
+        <member name="M:NcCode.nccode.NcRW.Mthd.UpDate(System.Int32)">
+            <summary>ＮＣ制御文の現在の状況の更新</summary>
+        </member>
+        <member name="M:NcCode.nccode.NcRW.Mthd.#ctor(NcCode.nccode.NcRW.Mthd,NcCode.nccode.CodeD)">
+            <summary>
+            マクロ文（制御文）の処理
+            </summary>
+            <param name="p_submthd"></param>
+            <param name="codeD"></param>
+            <returns></returns>
+        </member>
+        <member name="F:NcCode.nccode.NcRW._main_">
+            <summary>
+            呼出し元の__mainクラス add in 2008/07/23
+              ncoutm ncoute ncdir sfilの参照に用いる
+            </summary>
+        </member>
+        <member name="F:NcCode.nccode.NcRW.tmod">
+            <summary>最新のNcModを保存する</summary>
+        </member>
+        <member name="F:NcCode.nccode.NcRW.fsub">
+            <summary>各オブジェクト用マクロ変数</summary>
+        </member>
+        <member name="F:NcCode.nccode.NcRW.readInfo">
+            <summary>データ読み込み時の情報を保存する（fsubtは使用しない）</summary>
+        </member>
+        <member name="F:NcCode.nccode.NcRW.ndep">
+            <summary>NcCodeGのndepをコピーする（将来はここのみにする）</summary>
+        </member>
+        <member name="F:NcCode.nccode.NcRW.start">
+            <summary>
+            ＮＣデータ読み込みの状況
+            -1:有意データ前、0:有意データ、1:加工終了Ｍコード読み込み、2:終了
+            </summary>
+        </member>
+        <member name="F:NcCode.nccode.NcRW.nextPro">
+            <summary>サブルーチンのＮＣファイルリーダ</summary>
+        </member>
+        <member name="F:NcCode.nccode.NcRW.ido">
+            <summary>
+            各ＮＣデータ行での動作を決定（特にサブプロ）
+            </summary>
+        </member>
+        <member name="F:NcCode.nccode.NcRW.transp_mirror">
+            <summary>マクロ展開のデータに移動ミラーを設定する変数。NCSPEEDで使用するために設定 in 2010/06/22</summary>
+        </member>
+        <member name="M:NcCode.nccode.NcRW.#ctor(NcCode._main,NcCode.nccode.NcMod,CamUtil.Vector3)">
+            <summary>
+            完全なＮＣデータ（%;～%;）を１行単位で読込み／処理／書込みするクラスを作成するコンストラクタ
+            （ncgenより使用する場合）
+            </summary>
+            <param name="main">呼出し元の__mainクラス</param>
+            <param name="tmod">初期のＮＣのモード</param>
+            <param name="xyz">初期のＸＹＺ位置</param>
+        </member>
+        <member name="M:NcCode.nccode.NcRW.#ctor(NcCode._main,NcCode.nccode.NcMod,NcCode.nccode.NcMod.Fmsub,NcCode.nccode.NcMachine.Variable,NcCode.nccode.NcFileReader,NcCode.nccode.Transp_Mirror,NcCode.nccode.Ncdep)">
+            <summary>
+            ファイル内にあるＮＣデータのREAD,WRITEを処理するクラスを作成するコンストラクタ
+            </summary>
+            <param name="main">呼出し元の__mainクラス</param>
+            <param name="tmod">現在のtmod。ここに保存しておく</param>
+            <param name="fmsub">呼び出し条件</param>
+            <param name="pre">呼び出し元の変数</param>
+            <param name="nfr">ストリームリーダー</param>
+            <param name="trs_mir">NCSPEED専用の手順で設定された移動ミラー情報</param>
+            <param name="moto"></param>
+        </member>
+        <member name="M:NcCode.nccode.NcRW.VSet">
+            <summary>
+            マクロ変数の設定を実行する
+            </summary>
+        </member>
+        <member name="M:NcCode.nccode.NcRW.WriteLine(System.String)">
+            <summary>
+            （NcEW_Call）メインＮＣデータを１行処理し、出力を_main.ncoutmへ渡す
+            </summary>
+            <param name="ddat"></param>
+        </member>
+        <member name="M:NcCode.nccode.NcRW.ReadAll">
+            <summary>
+            （NcRW_File）サブプロの読出し（メインも）。モーダル（G81,G66...）の場合は繰返し使用される
+            </summary>
+        </member>
+        <member name="M:NcCode.nccode.NcRW.NcClose">
+            <summary>
+            １ショットのサブの終了とモーダルの終了。
+            （G80,G67）で呼出され、ファイルをクローズする。
+            </summary>
+        </member>
+        <member name="M:NcCode.nccode.NcRW.Nccode(System.Int32,System.String,System.Int32@,NcCode.nccode.NcRW.Mthd@)">
+            <summary>
+            ＮＣデータ１行を処理する（NcCode._mainで使用、ncrunでは使われない）
+            </summary>
+            <param name="line">行番号</param>
+            <param name="ddat">処理するＮＣデータ１行の文字列</param>
+            <param name="start">ＮＣデータの現状の状況</param>
+            <param name="mthd"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NcCode.nccode.NcRW.Ncoput(System.Int32,NcCode.nccode.NcOut[],NcCode.nccode.NcMod[],NcCode.nccode.OCode[])">
+            <summary>
+            
+            </summary>
+            <param name="ptr">出力するＮＣ情報のouuインデックス番号</param>
+            <param name="ouu">ouu[ptr][0]:最終位置、ouu[ptr][1]:最終直前の中間位置、ouu[ptr][2]:その前の中間位置、ouu[ptr+1][0]移動前の位置</param>
+            <param name="mod"></param>
+            <param name="lcode"></param>
+        </member>
+        <member name="M:NcCode.nccode.NcRW.IERR(System.Int32,System.String,System.Int32)">
+            <summary>
+            nccodeのエラー処理
+            </summary>
+            <param name="ierr">エラー番号</param>
+            <param name="ddat">エラー発生のＮＣデータ行</param>
+            <param name="line">エラー発生の行番号</param>
+        </member>
+        <member name="T:NcCode.nccode.Transp_Mirror">
+            <summary>
+            手順で設定された移動ミラーを入力時に処理します。NCSPEEDで使用するために新たに作成されました。 in 2010/06/22[不変]
+            </summary>
+        </member>
+        <member name="F:NcCode.nccode.Transp_Mirror.m_ido">
+            <summary>移動ベクトル</summary>
+        </member>
+        <member name="F:NcCode.nccode.Transp_Mirror.mirr">
+            <summary>ミラーベクトル</summary>
+        </member>
+        <member name="F:NcCode.nccode.Transp_Mirror.rev">
+            <summary>反転有無</summary>
+        </member>
+        <member name="M:NcCode.nccode.Transp_Mirror.#ctor(CamUtil.Vector3,CamUtil.NcZahyo,System.Boolean)">
+            <summary>唯一のコンストラクタ</summary>
+        </member>
+        <member name="T:NcCode.nccode.Ncdep">
+            <summary>
+            サブプログラムの呼出し深さ情報を保存します。
+            </summary>
+        </member>
+        <member name="M:NcCode.nccode.Ncdep.op_Equality(NcCode.nccode.Ncdep,NcCode.nccode.Ncdep)">
+            <summary>呼出し深さの==演算子</summary>
+        </member>
+        <member name="M:NcCode.nccode.Ncdep.op_Inequality(NcCode.nccode.Ncdep,NcCode.nccode.Ncdep)">
+            <summary>呼出し深さの!=演算子</summary>
+        </member>
+        <member name="F:NcCode.nccode.Ncdep.subf">
+            <summary>固定サイクルプログラムの深さ</summary>
+        </member>
+        <member name="F:NcCode.nccode.Ncdep.subm">
+            <summary>マクロプログラムの深さ</summary>
+        </member>
+        <member name="F:NcCode.nccode.Ncdep.subs">
+            <summary>一般サブプログラムの深さ</summary>
+        </member>
+        <member name="F:NcCode.nccode.Ncdep.gg09">
+            <summary>読み込みした行での固定サイクルモード</summary>
+        </member>
+        <member name="F:NcCode.nccode.Ncdep.gg12">
+            <summary>読み込みした行でのカスタムマクロモード</summary>
+        </member>
+        <member name="P:NcCode.nccode.Ncdep.Depth">
+            <summary>サブの合計深さ（メインは０）</summary>
+        </member>
+        <member name="M:NcCode.nccode.Ncdep.#ctor(System.Int32)">
+            <summary>コンストラクタ（初期化new）</summary>
+        </member>
+        <member name="M:NcCode.nccode.Ncdep.#ctor(CamUtil.LCode.Gcode,CamUtil.LCode.Gcode)">
+            <summary>コンストラクタ</summary>
+        </member>
+        <member name="M:NcCode.nccode.Ncdep.UpDateFix(System.Int32,CamUtil.LCode.Gcode)">
+            <summary>固定サイクルコールの更新</summary>
+        </member>
+        <member name="M:NcCode.nccode.Ncdep.UpDateMac(System.Int32,CamUtil.LCode.Gcode)">
+            <summary>マクロコールの更新</summary>
+        </member>
+        <member name="M:NcCode.nccode.Ncdep.UpDateSub(System.Int32)">
+            <summary>サブプロコールの更新</summary>
+        </member>
+        <member name="M:NcCode.nccode.Ncdep.Equals(System.Object)">
+            <summary>このインスタンスと指定した ncdep オブジェクトが同じ値を表しているかどうかを示す値を返します。</summary>
+            <param name="obj">このインスタンスと比較するオブジェクト。</param>
+            <returns>obj が ncdep のインスタンスで、このインスタンスの値に等しい場合は true。それ以外の場合は false。</returns>
+        </member>
+        <member name="M:NcCode.nccode.Ncdep.GetHashCode">
+            <summary>このインスタンスのハッシュ コードを返します。</summary>
+            <returns>32 ビット符号付き整数ハッシュ コード。</returns>
+        </member>
+        <member name="T:NcCode.nccode.OCode">
+            <summary>
+            ＮＣデータ１行の情報を保存します。[不変]
+            </summary>
+        </member>
+        <member name="F:NcCode.nccode.OCode.gsw">
+            <summary>
+            Ｇコードの設定状況
+            0:正常 1:Ｇコード無視 2:Ｇコードの１行無視 3:続行不能
+            </summary>
+        </member>
+        <member name="P:NcCode.nccode.OCode.Gg">
+            <summary>ＧコードグループごとのＧコード設定値</summary>
+        </member>
+        <member name="P:NcCode.nccode.OCode.Mst">
+            <summary>Ｍコードの設定値（１～）、mst[0]は１行の設定数</summary>
+        </member>
+        <member name="F:NcCode.nccode.OCode.codeData">
+            <summary>ＮＣデータ１行のコードを順に保管した情報（移動、ミラーをまとめて実施）</summary>
+        </member>
+        <member name="F:NcCode.nccode.OCode.g10">
+            <summary>G10,G11の設定状況（-2:未設定 -1:G11 0:G10）</summary>
+        </member>
+        <member name="F:NcCode.nccode.OCode.nrmFeed">
+            <summary>送り速度指定方法（Ｆ一桁送りの場合はFalse）</summary>
+        </member>
+        <member name="F:NcCode.nccode.OCode.subdep1">
+            <summary>プログラム深さ（この行実行後の）</summary>
+        </member>
+        <member name="F:NcCode.nccode.OCode.submthd">
+            <summary></summary>
+        </member>
+        <member name="F:NcCode.nccode.OCode.ncln">
+            <summary>ＮＣデータの行ナンバー</summary>
+        </member>
+        <member name="F:NcCode.nccode.OCode.nctx">
+            <summary>入力時のＮＣデータ一行の文字列（移動ミラーは反映されていないので注意！！）</summary>
+        </member>
+        <member name="F:NcCode.nccode.OCode.cmt">
+            <summary>コメントの文字列</summary>
+        </member>
+        <member name="P:NcCode.nccode.OCode.Subc">
+            <summary>Ｇコードマクロ呼出しでのマクロプログラム番号</summary>
+        </member>
+        <member name="P:NcCode.nccode.OCode.Gst12">
+            <summary>
+            Ｇコードマクロを含むモーダルなマクロコールを設定する行であるか判定（G67を含む）。
+            これにgg[0].Equals(65)を加えれば、すべてのマクロコールの設定行となる。
+            </summary>
+        </member>
+        <member name="P:NcCode.nccode.OCode.Gst09">
+            <summary>固定サイクルを設定する行であるか</summary>
+        </member>
+        <member name="M:NcCode.nccode.OCode.#ctor(System.Nullable{System.Int32}@,System.Int32,NcCode.nccode.CodeDList,System.Int32,NcCode.nccode.NcRW.Mthd,NcCode._main,NcCode.nccode.Transp_Mirror,NcCode.nccode.Ncdep)">
+            <summary>
+            ＮＣデータ１行の内容を解析しOCodeを作成する
+            </summary>
+            <param name="retValue"></param>
+            <param name="line">ＮＣデータの行ナンバー</param>
+            <param name="codeD_ncspd">ＮＣデータ行</param>
+            <param name="start">開始モード</param>
+            <param name="mthd"></param>
+            <param name="_main_">呼出し元の__mainクラス</param>
+            <param name="trs_mir">マクロ展開時に反映する移動・ミラー・反転情報。NCSPEEDで使用し、他では展開後メインに組み込まれるため反映しない</param>
+            <param name="sdep"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NcCode.nccode.OCode.Trans_Mirror(NcCode.nccode.Transp_Mirror)">
+            <summary>
+            
+            </summary>
+            <param name="trs_mir"></param>
+        </member>
+        <member name="M:NcCode.nccode.OCode.NcCodg(NcCode.nccode.Ncdep@,System.Int32@,CamUtil.LCode.Gcode)">
+            <summary>
+            Ｇコードの処理
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:NcCode.nccode.OCode.Equals(NcCode.nccode.OCode)">
+            <summary>このインスタンスと指定した OCode オブジェクトが同じ値を表しているかどうかを示す値を返します。</summary>
+            <param name="obj">このインスタンスと比較するオブジェクト。</param>
+            <returns>obj がこのインスタンスの値に等しい場合は true。それ以外の場合は false。</returns>
+        </member>
+        <member name="T:NcCode.nccode.Post">
+            <summary>
+            ＮＣデータの仕様を設定します。
+            ＧＥＮＥＲＡＬか各加工機用に変換されたデータか、区分がまだ不明確です。
+            </summary>
+        </member>
+        <member name="F:NcCode.nccode.Post.minim">
+            <summary>実数絶対値の最小</summary>
+        </member>
+        <member name="F:NcCode.nccode.Post.pName">
+            <summary>ＮＣデータ作成時のポスト名</summary>
+        </member>
+        <member name="P:NcCode.nccode.Post.PostData">
+            <summary>各ＮＣデータコードＡ－Ｚの仕様</summary>
+        </member>
+        <member name="F:NcCode.nccode.Post.m_digit">
+            <summary>各ＮＣの整数化コードを保存する倍率。－１は加工機により決定される。</summary>
+        </member>
+        <member name="M:NcCode.nccode.Post.Init(CamUtil.BaseNcForm)">
+            <summary>
+            イニシャライズ
+            </summary>
+        </member>
+        <member name="M:NcCode.nccode.Post.ZahyoSet(System.Int32)">
+            <summary>
+            座標値の設定
+            </summary>
+            <param name="jj"></param>
+        </member>
+        <member name="M:NcCode.nccode.Post.FcodeSet(System.Int32)">
+            <summary>
+            座標値の設定
+            </summary>
+            <param name="jj"></param>
+        </member>
+        <member name="T:NcCode.nccode.Post.Posts">
+            <summary>
+            各ＮＣコードの小数点の処理方法を設定する
+            </summary>
+        </member>
+        <member name="F:NcCode.nccode.Post.Posts.axis">
+            <summary>ＮＣコードが座標値を表す場合true</summary>
+        </member>
+        <member name="F:NcCode.nccode.Post.Posts.sdgt">
+            <summary>ＮＣコードが座標値で小数点なしの場合の桁数を表す</summary>
+        </member>
+        <member name="M:NcCode.nccode.Post.Posts.#ctor(System.Boolean,System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="p_axis"></param>
+            <param name="p_sdgt2"></param>
+        </member>
+        <member name="T:NcCode.nccode.St_vsw">
+            <summary>
+            マクロ変数の値を保存します。
+            </summary>
+        </member>
+        <member name="M:NcCode.nccode.St_vsw.ToC(System.String,System.Int16)">
+            <summary>
+            ＮＣデータ行の検索をする。最終文字＋１で'\0'を出力する
+            </summary>
+            <param name="ddat"></param>
+            <param name="ipos"></param>
+            <returns></returns>
+        </member>
+        <member name="F:NcCode.nccode.St_vsw.fsub">
+            <summary>現在の変数値</summary>
+        </member>
+        <member name="P:NcCode.nccode.St_vsw.Sswbl">
+            <summary>値の有無（true:定義済み false:未定義＝#0）</summary>
+        </member>
+        <member name="P:NcCode.nccode.St_vsw.Rdt">
+            <summary>数値</summary>
+        </member>
+        <member name="F:NcCode.nccode.St_vsw.pir">
+            <summary>ピリオドの有無</summary>
+        </member>
+        <member name="F:NcCode.nccode.St_vsw.mcr">
+            <summary>マクロ変数由来？</summary>
+        </member>
+        <member name="F:NcCode.nccode.St_vsw.nch">
+            <summary>文字数？</summary>
+        </member>
+        <member name="F:NcCode.nccode.St_vsw.bdt">
+            <summary>論理値</summary>
+        </member>
+        <member name="M:NcCode.nccode.St_vsw.#ctor(System.String,System.Int16@,System.Int32,System.Char,NcCode.nccode.NcMachine.Variable)">
+            <summary>
+            マクロの演算結果よりSt_vsw を作成する（nccalc）
+            </summary>
+            <param name="ddat">解析するＮＣデータ行</param>
+            <param name="qpoi">文字の位置</param>
+            <param name="juna">直前の演算子の優先順位（再帰呼出し時）</param>
+            <param name="adrs">ＮＣデータ行の場合にセットするＮＣコード（A,B...）。ROUND()で使用する</param>
+            <param name="p_fsub">マクロ変数</param>
+        </member>
+        <member name="M:NcCode.nccode.St_vsw.#ctor(System.String,System.Int16@,System.Char,NcCode.nccode.NcMachine.Variable)">
+            <summary>
+            １つのＮＣコードよりSt_vsw を作成する（ncval）
+            </summary>
+            <param name="ddat">解析するＮＣデータ行</param>
+            <param name="qpoi">文字の位置</param>
+            <param name="adrs">ＮＣデータ行の場合にセットするＮＣコード（A,B...）。ROUND()で使用する</param>
+            <param name="p_fsub">マクロ変数</param>
+        </member>
+        <member name="M:NcCode.nccode.St_vsw.SubCalc(System.String,System.Int16,System.Char@,System.Int32@)">
+            <summary>
+            演算子と計算順位を抽出する
+            </summary>
+            <param name="ddat">解析するＮＣデータ行</param>
+            <param name="qpoi">文字の初期位置</param>
+            <param name="qtmp">演算子</param>
+            <param name="jun">計算順位（1:積など、2:和など、3:論理和など）</param>
+            <returns>t次の文字位置</returns>
+        </member>
+        <member name="M:NcCode.nccode.St_vsw.Equals(NcCode.nccode.St_vsw)">
+            <summary>このインスタンスと指定した st_vsw オブジェクトが同じ値を表しているかどうかを示す値を返します。</summary>
+            <param name="obj">このインスタンスと比較するオブジェクト。</param>
+            <returns>obj が st_vsw のインスタンスで、このインスタンスの値に等しい場合は true。それ以外の場合は false。</returns>
+        </member>
+        <member name="T:NcCode._main">
+            <summary>
+            NcTejunで直接実行される以外のＮＣデータ解析プログラムの基本クラスです。
+            </summary>
+            <remarks>
+            ・ncoutm()：ＮＣデータ１行ごとにコールされるメソッドです。
+            ・ncoute()：ＮＣデータの最後にコールされるメソッドです。
+            ・Close() ：エラーで終了した場合にコールされるメソッドです。
+            </remarks>
+        </member>
+        <member name="F:NcCode._main.sdst">
+            <summary>現在の移動量積算値</summary>
+        </member>
+        <member name="F:NcCode._main.mcGENERAL">
+            <summary>GENERAL加工機名称</summary>
+        </member>
+        <member name="F:NcCode._main.Error">
+            <summary>エラー処理方法</summary>
+        </member>
+        <member name="F:NcCode._main.m_swNcCheckName">
+            <summary>ＮＣデータなどのチェック出力</summary>
+        </member>
+        <member name="P:NcCode._main.SwNcCheck">
+            <summary>ＮＣデータなどのチェック出力</summary>
+        </member>
+        <member name="F:NcCode._main.m_swNcCheck">
+            <summary>ＮＣデータなどのチェック出力</summary>
+        </member>
+        <member name="F:NcCode._main.tmod">
+            <summary>最新のNcMod</summary>
+        </member>
+        <member name="F:NcCode._main.ncName">
+            <summary>ＮＣデータ名</summary>
+        </member>
+        <member name="F:NcCode._main.maxLineNo">
+            <summary>ＮＣデータの行数（進行状況の表示に使用 ADD in 2014/10/22）</summary>
+        </member>
+        <member name="F:NcCode._main.ncReader">
+            <summary>ＮＣデータの入力と実行するNcRederクラス</summary>
+        </member>
+        <member name="P:NcCode._main.Ncdir">
+            <summary>
+            ＮＣプログラム検索フォルダーリスト
+            （最後に'/'がある場合はその後に加工機名が追加される）
+            </summary>
+        </member>
+        <member name="F:NcCode._main.sfil">
+            <summary>
+            サブプログラム名リスト
+            </summary>
+        </member>
+        <member name="M:NcCode._main.Ncoutm(NcCode.nccode.NcOuts,NcCode.nccode.NcMod,NcCode.nccode.OCode)">
+            <summary>
+            出力ＮＣデータ各行での処理を記述する
+            </summary>
+            <param name="nout"></param>
+            <param name="mod"></param>
+            <param name="lcode"></param>
+        </member>
+        <member name="M:NcCode._main.Ncoute">
+            <summary>
+            出力ＮＣデータの最終での処理を記述する
+            </summary>
+        </member>
+        <member name="M:NcCode._main.Close">
+            <summary>
+            終了処理
+            </summary>
+        </member>
+        <member name="M:NcCode._main.Ncerr(System.Int32,System.String)">
+            <summary>
+            ＮＣデータ解析時におけるエラーの処理を実行
+            </summary>
+            <param name="errn">エラー番号</param>
+            <param name="errc">表示するコメント</param>
+        </member>
+        <member name="M:NcCode._main.#ctor(System.String,System.String,CamUtil.Machine.MachID)">
+            <summary>
+            共通コンストラクタ
+            </summary>
+            <param name="program_name"></param>
+            <param name="machine_name">参照するマクロのフォルダー名の加工機部分の名称（例：\usr9\ASDM\CAMCTL\NCMEM\[machine_name]）</param>
+            <param name="machineID">加工機情報の初期設定に使用する加工機ID</param>
+        </member>
+        <member name="M:NcCode._main.MainNcdSet(System.String,NcCode.nccode.Transp_Mirror,CamUtil.Vector3,System.String)">
+            <summary>
+            入出力の設定。
+            FILE : ReadLine_File()により全行の処理を完了する
+            PC_FILE : ReadLine_File()により全行の処理を完了する
+            CALL : NcWR_CallのWriteLineにより書き込み、最後に_main.ncoute()を実行する
+            </summary>
+            <param name="file_Call"></param>
+            <param name="trs_mir">NCSPEED専用の移動/ミラー情報</param>
+            <param name="xyz">初期のＸＹＺ位置</param>
+            <param name="mac_name">展開するマクロ名</param>
+        </member>
+        <member name="M:NcCode._main.ReadLine_File">
+            <summary>
+            メインＮＣデータの全行の読み込み（ファイルから）
+            </summary>
+        </member>
+        <member name="M:NcCode._main.WriteLine(System.String)">
+            <summary>
+            メインＮＣデータ１行を処理させます
+            </summary>
+            <param name="ddat"></param>
+        </member>
+        <member name="M:NcCode._main.WriteEnd">
+            <summary>メインＮＣデータの処理をリセットします</summary>
+        </member>
+    </members>
+</doc>
