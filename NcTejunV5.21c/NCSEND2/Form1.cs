@@ -15,6 +15,8 @@ using CamUtil.CamNcD;
 
 namespace NCSEND2
 {
+    // test
+
 	partial class Form1 : Form
 	{
 		/// <summary>ＣＡＭのシステム番号（ラジオボタンの０からの連番 0:TEBIS 1:Dynavista）</summary>
